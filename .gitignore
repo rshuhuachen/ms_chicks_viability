@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+data/genomic
+log
+output/1_relatedness
+output/2_inbreeding
+output/3_annotated_genomes
+output/4_load
+output/5_models
+

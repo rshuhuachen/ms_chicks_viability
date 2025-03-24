@@ -1,0 +1,17 @@
+# working directory
+dir: "/vol/cluster-data/rchen/wgr/chicks_genomes"
+
+# path to output directory
+output_dir: "/vol/cluster-data/rchen/wgr/chicks_genomes/output"
+
+# input directory where raw reads are
+input_dir: "/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data"
+
+# file from BMK with their vs my names of samples
+BMK_names: "/vol/cluster-data/rchen/wgr/chicks_genomes/data/sampleName_clientId_first2.txt"
+
+# tmp location 
+tmpdir: "/grp/molecol/rchen/temp"
+
+# reference genome 
+ref_gen: "/vol/cluster-data/rchen/annotation/PO2979_Lyrurus_tetrix_black_grouse.RepeatMasked.fasta"

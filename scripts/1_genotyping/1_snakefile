@@ -1,0 +1,109 @@
+'''
+snakemake --snakefile scripts/1_genotyping/1_snakefile --configfile scripts/1_genotyping/config.yaml \
+  --jobs 8 \
+  -p \
+  --default-resources mem_mb=10000 \
+  --use-conda \
+  --cluster '
+     sbatch \
+      --export ALL \
+      -n {threads} \
+      -e log/{name}.{jobid}.err \
+      -o log/{name}.{jobid}.out \
+      --mem={resources.mem_mb}' \
+      --jn align.{name}.{jobid}.sh 
+
+
+'''
+
+SAMPLES=["C01","C02","C03","C04","C05","C06","C07","C08","C09","C10","C11","C12","C13","C14","C15","C16","C17","C18","C19","C20","C21","C22","C23","C24","C25","C26","C27","C28","C29","C30","C31","C32","C33","C34","C35","C36","C37","C38","C39","C40","C41","C42","C43","C44","C45","C46"]
+READ=["1", "2"]
+
+rule all:
+        input:
+	        expand("/vol/cluster-data/rchen/wgr/analyses/fastqc/{file}_{frr}_fastqc.{extension}",file=FILE,frr=FRR,extension=["zip","html"]),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data/{sample}_good_{read}.fq.gz",sample=SAMPLES, read=READ),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data/{sample}_good_1.fq.gz",sample=SAMPLES),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data/{sample}_good_2.fq.gz",sample=SAMPLES),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/data/clean/{sample}_clean_{read}.fq.gz",sample=SAMPLES, read=READ),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sam",sample=SAMPLES),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sorted.bam.bai", sample=SAMPLES),
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.bam",sample=SAMPLES)
+                expand("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/ltet_chicks.vcf",output_dir=config["output_dir"])
+
+
+rule alignment:
+        input:
+                readforward="/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data/{sample}_good_1.fq.gz",
+                readbackward="/vol/cluster-data/rchen/wgr/chicks_genomes/data/BMK231125-BT148-ZX01-0201/BMK_DATA_20231229114919_1/Data/{sample}_good_2.fq.gz"
+        output:
+                samfile=temporary("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sam")
+        params:
+                refgen="/vol/cluster-data/rchen/annotation/PO2979_Lyrurus_tetrix_black_grouse.RepeatMasked.fasta"
+        threads:
+                12
+        log:
+                "log/alignment_{sample}.log"
+        shell:
+                """
+                /vol/biotools/bin/bwa mem -t {threads} {params.refgen} {input.readforward} {input.readbackward} 2> {log} > {output.samfile}
+                """
+
+rule sam_to_bam:
+        input:
+                samfile="/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sam"
+        output:
+                bamfile=temporary("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.bam")
+        shell:
+                """
+                /vol/biotools/bin/samtools view -S -b {input.samfile} > {output}
+                """
+
+rule sortbam:
+        input:
+                bamfile=rules.sam_to_bam.output.bamfile
+        output:
+                sortedbamfile="/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sorted.bam"
+        shell:
+                """
+                /vol/biotools/bin/samtools sort {input.bamfile} -o {output}
+                """
+
+rule stats_alignment:
+        input:
+                sortedbamfile=rules.sortbam.output.sortedbamfile
+        output:
+                stats="/vol/cluster-data/rchen/wgr/chicks_genomes/output/stats_chicks.txt"
+        shell:
+                """
+                printf '\n' >> {output.stats}
+                echo {input.sortedbamfile} >> {output.stats}
+                /vol/biotools/bin/samtools flagstat {input.sortedbamfile} >> {output.stats}
+                """
+
+#for i in /vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/*sorted.bam; 
+#do printf '\n' >> output/stats_chicks.txt
+#echo $i >> output/stats_chicks.txt
+#/vol/biotools/bin/samtools flagstat $i >> output/stats_chicks.txt;
+#done
+
+rule index_bamfiles:
+        input:
+                sortedbamfile=rules.sortbam.output.sortedbamfile
+        output:
+                sortedindexedbamfile="/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/{sample}.sorted.bam.bai"
+        shell:
+                """
+                /vol/biotools/bin/samtools index {input.sortedbamfile} {output.sortedindexedbamfile}
+                """
+
+rule list_bamfiles:
+        params:
+                dir="/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/"
+	output: 
+                bamfiles="/vol/cluster-data/rchen/wgr/chicks_genomes/output/list_bamfiles_chicks.txt"
+	shell: 
+		"""
+		ls -1 {params.dir}/*sorted.bam > {output}
+		"""
+

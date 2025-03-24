@@ -1,0 +1,50 @@
+
+"""
+snakemake -n --rerun-triggers mtime --use-singularity --snakefile scripts/2_snpeff/snakefile\
+  --singularity-args "--bind /vol/cluster-data/rchen/wgr/chicks_genomes:/vol/cluster-data/rchen/git/ms_purging_grouse:/vol/cluster-data/rchen/git/genetic_load_ltet/scripts/snpeff/1_ancestral_as_reference" \
+  --use-conda -c 1 
+
+
+snakemake --jobs 100 \
+--snakefile scripts/2_snpeff/snakefile \
+  --latency-wait 30 --rerun-incomplete \
+  -p \
+  --default-resources mem_mb=51200 threads=8 \
+  --use-singularity \
+  --singularity-args "--bind /vol/cluster-data/rchen/git/ms_purging_grouse" \
+  --use-conda \
+  --rerun-triggers mtime \
+  --cluster '
+      sbatch \
+        --export=ALL \
+        -n {threads} \
+        -e log/{name}.{jobid}.err \
+        -o log/{name}.{jobid}.out \
+        --mem={resources.mem_mb} ' \
+        --jn ancestral.{name}.{jobid}.sh \
+        --rerun-incomplete
+
+"""
+
+rule all:
+        input:
+                "data/processed/annotated/ltet_filtered_ann_aa_chick.vcf",
+                "data/processed/annotated/ltet_filtered_ann_aa_chick.vcf_wrongscaf.gz" 
+      
+rule convert_vcf_alleles:
+  input:
+    vcf = "data/processed/annotated/ltet_filtered_ann_aa_chick.vcf",
+    jsscript = "scripts/2_snpeff/script.js"
+  output:
+    gzvcf = "data/processed/annotated/ltet_filtered_ann_aa_chick.vcf_wrongscaf.gz"
+  resources:
+      mem_mb=25600
+  container: "/vol/cluster-data/rchen/git/genetic_load_ltet/scripts/snpeff/1_ancestral_as_reference/workflow/containers/jvarkit_1b2aedf24.sif"
+  shell:
+    """
+    java -jar /opt/jvarkit/dist/jvarkit.jar \
+      vcffilterjdk \
+      -f {input.jsscript} {input.vcf} | \
+      bgzip > {output.gzvcf}
+    """
+

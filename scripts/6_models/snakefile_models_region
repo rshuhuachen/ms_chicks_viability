@@ -1,0 +1,42 @@
+"""
+snakemake --snakefile scripts/6_models/snakefile_models_region -n 
+
+snakemake --jobs 50 --snakefile scripts/6_models/snakefile_models_region \
+    --latency-wait 30 \
+    -p \
+    --default-resources mem_mb=51200 \
+    --use-conda \
+    --rerun-triggers mtime \
+    --cluster '
+      sbatch \
+        --export=ALL \
+        -n {threads} \
+        -e logs/{name}.{jobid}.err \
+        -o logs/{name}.{jobid}.out \
+        --mem={resources.mem_mb} ' \
+        --jn chick_model.{name}.{jobid}.sh \
+        --rerun-incomplete
+"""
+
+REGIONS=["promoters","exons","introns"]
+METHODS=["high","gerp"]
+
+rule all:
+    input:
+        "scripts/6_models/4_loads_per_region.R",
+        expand("output/5_models/per_region/brms_total_chicks_{method}_{region}.RData", region=REGIONS, method=METHODS)
+
+rule run_bayes_total:
+    input: 
+        rscript = "scripts/6_models/4_loads_per_region.R"
+    output:
+        model = "output/5_models/per_region/brms_total_chicks_{method}_{region}.RData"
+    log: "log/bayesmodel_chick_{method}_{region}.log"
+    params:
+      iter = 1000000,
+      burn = 500000,
+      thin = 1000
+    shell:
+        """
+        Rscript --vanilla {input.rscript} {wildcards.method} {wildcards.region} {output.model} {params.iter} {params.burn} {params.thin} &> {log}
+        """
