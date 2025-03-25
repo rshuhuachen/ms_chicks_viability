@@ -148,4 +148,4 @@ loads_regions_high <- rbind(load_exon_high, load_intron_high, load_promo_high)
 #### combine loads into one file ####
 load_per_region <- rbind(loads_regions_gerp, loads_regions_high)
 
-save(load_per_region, file = "output/4_load/loads_per_region.RData")
+save(load_per_region, file = "output/loads_per_region.RData")

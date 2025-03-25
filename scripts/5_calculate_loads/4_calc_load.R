@@ -117,6 +117,6 @@ dev.off()
 
 ### Save loads ####
 loads <- rbind(high_load, gerp_load)
-save(loads, file = "output/4_load/loads.RData")
+save(loads, file = "output/loads.RData")
 
 

@@ -86,8 +86,8 @@ froh$age <- factor(froh$age, levels = c("chick", "adult"))
 summary(lm(froh ~ age, data = subset(froh, id != "C09"))) #sig, so only when excluding small rohs (< 100kb & < 100) do chicks have higher froh
 summary(lm(froh ~ age, data = subset(froh, froh < 0.3 & id != "C09")))
 
-write.csv(froh, "output/2_inbreeding/froh_chick_adult.txt", quote=F, row.names=F)
-save(froh, file = "output/2_inbreeding/froh_chick_adult.RData")
+#write.csv(froh, "output/froh_chick_adult.txt", quote=F, row.names=F)
+save(froh, file = "output/froh_chick_adult.RData")
 
 ### summary
 summary(froh$froh[which(froh$age == "chick" & froh$id!="C09")])

@@ -229,4 +229,4 @@ intervals_clean <- data.frame(parameter = intervals$parameter,
                               ci_95 = paste0(round(intervals$ll, 2),",", round(intervals$hh,2)))
 intervals_clean
 
-write_tsv(intervals_clean, file = "output/5_models/intervals_loads.tsv")
+write_tsv(intervals_clean, file = "output/intervals_loads.tsv")

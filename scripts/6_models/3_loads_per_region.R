@@ -11,13 +11,24 @@ warm <- args[[5]]
 thin <- args[[6]]
 
 # load loads
-load(file = "output/4_load/loads_per_region.RData")
+load(file = "output/loads_per_region.RData")
+
+# load meta
+load(file = "data/metadata/metadata_adult_chick.RData")
+
+load_per_region <- left_join(load_per_region, meta, by = "id")
+load_per_region <- load_per_region %>% mutate(age = as.factor(case_when(
+  grepl("C", load_per_region$id) ~ "chick",
+  grepl("D", load_per_region$id) ~ "adult"
+)))
+
+load_per_region$age <- factor(load_per_region$age, levels = c("chick", "adult"))
 
 # subset only the relevant method/loadtype
-type == paste0(method, "_", region)
+type = paste0(method, "_", region)
 
 #### model ####
-fit <- brm(scale(total_load) ~ age + (1|site), data = subset(loads, loadtype == type),
+fit <- brm(scale(total_load) ~ age + (1|site), data = subset(load_per_region, loadtype == type),
            family = "gaussian",
            prior = prior(normal(0,1), class = b),
            cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
