@@ -2,7 +2,7 @@
 pacman::p_load(brms, bayesplot, tidyverse, data.table)
 
 #### Load Froh data ####
-load(file = "output/2_inbreeding/froh_chick_adult.RData")
+load(file = "output/froh_chick_adult.RData")
 
 ### Load metadata ###
 load(file = "data/metadata/metadata_adult_chick.RData")

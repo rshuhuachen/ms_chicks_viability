@@ -5,6 +5,7 @@ pacman::p_load(brms, bayesplot, tidyverse, data.table, ggridges, performance)
 #### theme ####
 source("scripts/theme_ggplot.R")
 source("scripts/function_diagnose_brms.R")
+
 #### inbreeding depression ####
 load(file = "output/5_models/brm_froh_chicks.RData")
 

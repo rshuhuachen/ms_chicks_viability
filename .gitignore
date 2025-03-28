@@ -8,7 +8,7 @@ data/genomic
 log
 output/1_relatedness
 output/2_inbreeding
-output/3_annotated_genomes
+output/3_annotated_genome
 output/4_load
 output/5_models
 

@@ -66,8 +66,7 @@ png("plots/load/compare_high_hom.png", width=600, height = 600)
 compare_high_hom
 dev.off()
 
-
-### GERP ####
+#### GERP ####
 
 ## load data
 load(file = "output/4_load/gerp/gerps_all.RData")
