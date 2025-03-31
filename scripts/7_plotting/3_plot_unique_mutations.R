@@ -1,10 +1,10 @@
 ## load packages ####
-pacman::p_load(dplyr, data.table)
+pacman::p_load(dplyr, data.table, ggplot2)
 
 source("scripts/theme_ggplot.R")
 
 ## load summary data ####
-load(file= "output/3_annotated_genome/summary_unique_mutations.RData")
+load(file= "output/3_annotated_genome/summary_unique_mutations_40ids.RData")
 
 ggplot(summary, aes(x = rxy)) + geom_histogram(fill = clr_grey, col = "black") + 
   labs(x = expression(R[XY]), y = "Count") + 
