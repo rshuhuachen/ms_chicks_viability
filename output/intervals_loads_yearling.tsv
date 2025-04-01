@@ -1,0 +1,7 @@
+parameter	model	load	median	ci_95
+b_lifespan_catadult	GERP	Total	-0.03	-0.38,0.33
+b_lifespan_catadult	SnpEff	Total	-0.15	-0.5,0.21
+b_lifespan_catadult	GERP	Hom	0.23	-0.12,0.59
+b_lifespan_catadult	SnpEff	Hom	-0.22	-0.58,0.13
+b_lifespan_catadult	GERP	Het	-0.24	-0.58,0.12
+b_lifespan_catadult	SnpEff	Het	0.08	-0.25,0.42

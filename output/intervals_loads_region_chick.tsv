@@ -1,0 +1,7 @@
+parameter	model	region	median	ci_95
+b_ageadult	GERP	Promoter	-0.14	-0.47,0.15
+b_ageadult	GERP	Exon	-0.99	-1.29,-0.69
+b_ageadult	GERP	Intron	0.01	-0.3,0.33
+b_ageadult	SnpEff	Promoter	-0.13	-0.45,0.18
+b_ageadult	SnpEff	Exon	0.26	-0.05,0.58
+b_ageadult	SnpEff	Intron	0.18	-0.16,0.51

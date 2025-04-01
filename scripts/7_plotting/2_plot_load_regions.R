@@ -130,100 +130,109 @@ total_load_region
 
 ggsave(total_load_region, file = "plots/load/posterior_load_per_region.png", width = 14, height = 8)
 
+### export intervals
+intervals_clean <- data.frame(parameter = intervals$parameter,
+                              model = intervals$model, 
+                              region = intervals$region,
+                              median = round(intervals$m,2),
+                              ci_95 = paste0(round(intervals$ll, 2),",", round(intervals$hh,2)))
+intervals_clean
+
+write_tsv(intervals_clean, file = "output/intervals_loads_region_chick.tsv")
 
 #### Yearling vs adult ####
 load(file = "output/5_models/per_region/brms_total_subadult_gerp_promoters.RData")
-gerp_promo <- fit
+gerp_promo_yearling <- fit
 load(file = "output/5_models/per_region/brms_total_subadult_gerp_exons.RData")
-gerp_exon <- fit
+gerp_exon_yearling <- fit
 load(file = "output/5_models/per_region/brms_total_subadult_gerp_introns.RData")
-gerp_intron <- fit
+gerp_intron_yearling <- fit
 
 load(file = "output/5_models/per_region/brms_total_subadult_high_promoters.RData")
-high_promo <- fit
+high_promo_yearling <- fit
 load(file = "output/5_models/per_region/brms_total_subadult_high_exons.RData")
-high_exon <- fit
+high_exon_yearling <- fit
 load(file = "output/5_models/per_region/brms_total_subadult_high_introns.RData")
-high_intron <- fit
+high_intron_yearling <- fit
 
 rm(fit)
 
 #### diagnose ####
-diagnose_gerp_promo <- diagnose(fit = gerp_promo, modelname = "gerp_promo_sa")
-diagnose_gerp_exon <- diagnose(fit = gerp_exon, modelname = "gerp_exon_sa")
-diagnose_gerp_intron <- diagnose(fit = gerp_intron, modelname = "gerp_intron_sa")
-diagnose_high_promo <- diagnose(fit = high_promo, modelname = "high_promo_sa")
-diagnose_high_exon <- diagnose(fit = high_exon, modelname = "high_exon_sa")
-diagnose_high_intron <- diagnose(fit = high_intron, modelname = "high_intron_sa")
+diagnose_gerp_promo_yearling <- diagnose(fit = gerp_promo_yearling, modelname = "gerp_promo_sa")
+diagnose_gerp_exon_yearling <- diagnose(fit = gerp_exon_yearling, modelname = "gerp_exon_sa")
+diagnose_gerp_intron_yearling <- diagnose(fit = gerp_intron_yearling, modelname = "gerp_intron_sa")
+diagnose_high_promo_yearling <- diagnose(fit = high_promo_yearling, modelname = "high_promo_sa")
+diagnose_high_exon_yearling <- diagnose(fit = high_exon_yearling, modelname = "high_exon_sa")
+diagnose_high_intron_yearling <- diagnose(fit = high_intron_yearling, modelname = "high_intron_sa")
 
 ### plot ###
 
 # get intervals
-gerp_promo_interval <- mcmc_intervals_data(gerp_promo, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-gerp_exon_interval <-  mcmc_intervals_data(gerp_exon, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-gerp_intron_interval <- mcmc_intervals_data(gerp_intron, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_promo_interval <-  mcmc_intervals_data(high_promo, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_exon_interval <- mcmc_intervals_data(high_exon, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_intron_interval <-  mcmc_intervals_data(high_intron, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_promo_interval_yearling <- mcmc_intervals_data(gerp_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_exon_interval_yearling <-  mcmc_intervals_data(gerp_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_intron_interval_yearling <- mcmc_intervals_data(gerp_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_promo_interval_yearling <-  mcmc_intervals_data(high_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_exon_interval_yearling <- mcmc_intervals_data(high_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_intron_interval_yearling <-  mcmc_intervals_data(high_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
 
-intervals <- rbind(gerp_promo_interval,
-                   gerp_exon_interval,
-                   gerp_intron_interval,
-                   high_promo_interval,
-                   high_exon_interval,
-                   high_intron_interval)
+intervals_yearling <- rbind(gerp_promo_interval_yearling,
+                   gerp_exon_interval_yearling,
+                   gerp_intron_interval_yearling,
+                   high_promo_interval_yearling,
+                   high_exon_interval_yearling,
+                   high_intron_interval_yearling)
 
-intervals$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEff")
-intervals$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
+intervals_yearling$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEff")
+intervals_yearling$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
 
 # get areas
-gerp_promo_area <- mcmc_areas_data(gerp_promo, pars = "b_lifespan_catAdult")
-gerp_exon_area <- mcmc_areas_data(gerp_exon, pars = "b_lifespan_catAdult")
-gerp_intron_area <- mcmc_areas_data(gerp_intron, pars = "b_lifespan_catAdult")
-high_promo_area <- mcmc_areas_data(high_promo, pars = "b_lifespan_catAdult")
-high_exon_area <- mcmc_areas_data(high_exon, pars = "b_lifespan_catAdult")
-high_intron_area <- mcmc_areas_data(high_intron, pars = "b_lifespan_catAdult")
+gerp_promo_area_yearling <- mcmc_areas_data(gerp_promo_yearling, pars = "b_lifespan_catAdult")
+gerp_exon_area_yearling <- mcmc_areas_data(gerp_exon_yearling, pars = "b_lifespan_catAdult")
+gerp_intron_area_yearling <- mcmc_areas_data(gerp_intron_yearling, pars = "b_lifespan_catAdult")
+high_promo_area_yearling <- mcmc_areas_data(high_promo_yearling, pars = "b_lifespan_catAdult")
+high_exon_area_yearling <- mcmc_areas_data(high_exon_yearling, pars = "b_lifespan_catAdult")
+high_intron_area_yearling <- mcmc_areas_data(high_intron_yearling, pars = "b_lifespan_catAdult")
 
-areas <- rbind(gerp_promo_area,
-               gerp_exon_area,
-               gerp_intron_area,
-               high_promo_area,
-               high_exon_area,
-               high_intron_area)
+areas_yearling <- rbind(gerp_promo_area_yearling,
+               gerp_exon_area_yearling,
+               gerp_intron_area_yearling,
+               high_promo_area_yearling,
+               high_exon_area_yearling,
+               high_intron_area_yearling)
 
-areas$model <- c(rep("GERP", nrow(gerp_promo_area)),
-                 rep("GERP", nrow(gerp_exon_area)),
-                 rep("GERP", nrow(gerp_intron_area)),
-                 rep("SnpEff", nrow(high_promo_area)),
-                 rep("SnpEff", nrow(high_exon_area)),
-                 rep("SnpEff", nrow(high_intron_area)))
+areas_yearling$model <- c(rep("GERP", nrow(gerp_promo_area_yearling)),
+                 rep("GERP", nrow(gerp_exon_area_yearling)),
+                 rep("GERP", nrow(gerp_intron_area_yearling)),
+                 rep("SnpEff", nrow(high_promo_area_yearling)),
+                 rep("SnpEff", nrow(high_exon_area_yearling)),
+                 rep("SnpEff", nrow(high_intron_area_yearling)))
 
-areas$region <- c(rep("Promoter", nrow(gerp_promo_area)),
-                  rep("Exon", nrow(gerp_exon_area)),
-                  rep("Intron", nrow(gerp_intron_area)),
-                  rep("Promoter", nrow(high_promo_area)),
-                  rep("Exon", nrow(high_exon_area)),
-                  rep("Intron", nrow(high_intron_area)))
+areas_yearling$region <- c(rep("Promoter", nrow(gerp_promo_area_yearling)),
+                  rep("Exon", nrow(gerp_exon_area_yearling)),
+                  rep("Intron", nrow(gerp_intron_area_yearling)),
+                  rep("Promoter", nrow(high_promo_area_yearling)),
+                  rep("Exon", nrow(high_exon_area_yearling)),
+                  rep("Intron", nrow(high_intron_area_yearling)))
 
 #rearrange order for visualization
-intervals$model  <- factor(as.factor(intervals$model),
+intervals_yearling$model  <- factor(as.factor(intervals_yearling$model),
                            levels= c("SnpEff", "GERP"))
 
-intervals$region  <- factor(as.factor(intervals$region),
+intervals_yearling$region  <- factor(as.factor(intervals_yearling$region),
                             levels= c("Exon", "Promoter","Intron"))
 
-areas$model  <- factor(as.factor(areas$model),
+areas_yearling$model  <- factor(as.factor(areas_yearling$model),
                        levels= c("SnpEff", "GERP"))
 
-areas$region  <- factor(as.factor(areas$region),
+areas_yearling$region  <- factor(as.factor(areas_yearling$region),
                         levels= c("Exon", "Promoter","Intron"))
 
 ### plot
 
 # split by interval
-brms <- split(areas, areas$interval)
+brms_yearling <- split(areas_yearling, areas_yearling$interval)
 
-brms$bottom <- brms$outer %>%
+brms_yearling$bottom <- brms_yearling$outer %>%
   summarise(
     ll = min(.data$x),
     hh = max(.data$x),
@@ -233,12 +242,12 @@ brms$bottom <- brms$outer %>%
 
 ##### plot total load ####
 
-ggplot(data = brms$outer) +  
+ggplot(data = brms_yearling$outer) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
-  geom_segment(data=intervals, aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=intervals, aes(x = ll, xend = hh, yend = model), col = "black")+
-  geom_point(data=intervals, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_segment(data=intervals_yearling, aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=intervals_yearling, aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_point(data=intervals_yearling, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression(beta~" for adults compared to yearlings"), y = "Density")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
@@ -253,6 +262,16 @@ ggplot(data = brms$outer) +
 total_load_region_sa
 
 ggsave(total_load_region_sa, file = "plots/load/posterior_load_per_region_subadult.png", width = 14, height = 8)
+
+### export intervals
+intervals_clean_yearling <- data.frame(parameter = intervals_yearling$parameter,
+                              model = intervals_yearling$model, 
+                              region = intervals_yearling$region,
+                              median = round(intervals_yearling$m,2),
+                              ci_95 = paste0(round(intervals_yearling$ll, 2),",", round(intervals_yearling$hh,2)))
+intervals_clean_yearling
+
+write_tsv(intervals_clean_yearling, file = "output/intervals_loads_region_yearling.tsv")
 
 #### Boxplots ####
 #### Load loads per region ####

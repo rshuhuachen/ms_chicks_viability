@@ -2,7 +2,7 @@
 pacman::p_load(genomation, data.table, GenomicFeatures, rtracklayer, fuzzyjoin, tibble, dplyr, GenomicRanges, tidyverse)
 
 # function to calculate load
-source("scripts/function_calculate_load.R")
+source("scripts/5_calculate_loads/function_calculate_load.R")
 
 #### GERP ####
 load("output/4_load/gerp/gerps_all.RData")
