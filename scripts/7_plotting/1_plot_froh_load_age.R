@@ -269,7 +269,7 @@ ggplot(data = brms_froh$outer) +
   geom_segment(data=interval_froh, aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=interval_froh, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to yearlings"), y = "Density", title = "Inbreeding")+
+  labs(x = expression(beta~"estimate for long-lived compared to short-lived males"), y = "Density", title = "Inbreeding")+
   scale_y_discrete(labels = c(expression(italic(F)[ROH])))+
   # xlim(-0.6, 0.6)+
   theme(panel.border = element_blank(),
@@ -387,7 +387,7 @@ ggplot(data = subset(brms_yearling$outer, load == "Total")) +
   geom_segment(data=subset(intervals_yearling, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=subset(intervals_yearling, load == "Total"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to yearlings"), y = "Density", title = "Total load")+
+  labs(x = expression(beta~"estimate for long-lived compared to short-lived males"), y = "Density", title = "Total load")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   theme(panel.border = element_blank(),
@@ -407,7 +407,7 @@ ggplot(data = subset(brms_yearling$outer, load == "Hom")) +
   geom_segment(data=subset(intervals_yearling, load == "Hom"), aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=subset(intervals_yearling, load == "Hom"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to yearlings"), y = "Density", title = "Homozygous load")+
+  labs(x = expression(beta~"estimate for long-lived compared to short-lived males"), y = "Density", title = "Homozygous load")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   theme(panel.border = element_blank(),
@@ -428,7 +428,7 @@ ggplot(data = subset(brms_yearling$outer, load == "Het")) +
   geom_segment(data=subset(intervals_yearling, load == "Het"), aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=subset(intervals_yearling, load == "Het"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to yearlings"), y = "Density", title = "Heterozygous load")+
+  labs(x = expression(beta~"estimate for long-lived compared to short-lived males"), y = "Density", title = "Heterozygous load")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   theme(panel.border = element_blank(),
