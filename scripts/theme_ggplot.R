@@ -9,9 +9,10 @@ theme_set(theme_classic() + theme(title = element_text(size=18),
                                   strip.text = element_text(size = 18, family = "Arial"),
                                   axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0),
                                                               color = "black"),
-                                  plot.margin = margin(1.5,0.75,0.75,0.75, "cm"),
+                                  plot.margin = margin(1,1,1,1, "cm"),
                                   axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0),
                                                               color = "black"),
+                                  plot.title = element_text(family = "Arial", size = 22, margin=margin(0,0,25,0)),
                                   panel.background = element_rect(fill = "white", colour = NA),
                                   plot.background = element_rect(fill = "white", colour = NA),))
 

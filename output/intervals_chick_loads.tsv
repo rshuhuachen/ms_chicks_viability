@@ -1,0 +1,3 @@
+parameter	model	load	median	ci_95	ci_80
+b_ageadult	GERP	Total	-0.62	-0.95, -0.3	-0.82, -0.42
+b_ageadult	SnpEff	Total	0	-0.32, 0.3	-0.2, 0.2
