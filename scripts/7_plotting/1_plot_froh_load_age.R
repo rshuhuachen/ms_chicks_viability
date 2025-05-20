@@ -580,3 +580,39 @@ combined_plot <- cowplot::plot_grid(froh_both, gerp_both, snpeff_both,
 png("plots/figure_1_compare.png", height = 1000, width = 600)
 fig
 dev.off()
+
+
+
+### alternative ####
+brms_all$outer$model <- factor(brms_all$outer$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
+all_intervals$model <- factor(all_intervals$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
+
+brms_all$outer$parameter <- factor(brms_all$outer$parameter, levels = c("Post-juveniles compared to chicks", "Adults compared to yearlings"))
+all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Post-juveniles compared to chicks", "Adults compared to yearlings"))
+
+all_posteriors <- ggplot(data = brms_all$outer) +  
+  aes(x = .data$x, y = .data$model) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_segment(data=all_intervals,  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=all_intervals, aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_point(data=all_intervals, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardised"~beta~"estimate"))+
+  scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
+  scale_color_manual(values =c(clr_high, clr_gerp)) +
+  facet_grid(~parameter, labeller = label_wrap_gen())+
+ scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        plot.title = element_blank(),
+        strip.text.x = element_text(size = 22, margin = margin(15,15, 200, 15)),
+        axis.title.y = element_blank()) # element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))) 
+
+all_posteriors
+
+
+png("plots/figure_1_all.png", height = 800, width = 800)
+all_posteriors
+dev.off()
