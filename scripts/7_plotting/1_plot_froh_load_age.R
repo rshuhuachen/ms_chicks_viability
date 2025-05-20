@@ -601,7 +601,8 @@ all_posteriors <- ggplot(data = brms_all$outer) +
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   facet_grid(~parameter, labeller = label_wrap_gen())+
- scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
+  xlim(-2,2)+
+  scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
   theme(panel.border = element_blank(),
         panel.grid = element_blank(),
         strip.background = element_blank(),
