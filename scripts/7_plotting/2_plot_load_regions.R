@@ -377,4 +377,51 @@ ggplot(load_per_region, aes(x = age, y = total_load)) +
 compare_loads
 ggsave(compare_loads, file = "plots/load/boxplots_region_gerp_snpeff.png", width=14,height=18)
 
+### Figure 2 alternative: posteriors and raw data ####
+
+# posteriors
+ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & parameter == "Post-juvenile compared to chick")) +  
+  aes(x = .data$x, y = .data$region) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = ll, xend = hh, yend = region), col = "black")+
+  geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardised"~beta~" estimate"))+
+  scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
+  scale_color_manual(values =c(clr_high)) +
+  xlim(-1.5,1)+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        axis.title.y = element_blank()) -> gerp_per_region_yearling
+
+# raw data
+load_per_region$region <- gsub("Exons", "Exon", load_per_region$region)
+load_per_region$region <- gsub("Promoters", "Promoter", load_per_region$region)
+load_per_region$region <- gsub("Introns", "Intron", load_per_region$region)
+load_per_region$region <- factor(load_per_region$region, levels = c("Exon", "Promoter", "Intron"))
+
+subset(load_per_region, method == "GERP ≥ 4") %>% 
+  ggplot(aes(x = age, y = total_load)) + 
+  geom_point(position="jitter", aes(fill = method), color="black", shape=21, size = 3)+
+  geom_violin(fill = alpha("white", 0.7)) + 
+  theme(plot.title = element_text(margin=margin(0,0,1,0, "cm")))+
+  geom_boxplot(width=0.2, fill = alpha("#8DAA91", 0.7), outlier.shape = NA)+
+#  stat_summary(fun = "median", geom = "crossbar", width = 0.5, colour = "black")+
+  scale_color_manual(values = c(clr_high))+
+  scale_fill_manual(values = c(clr_high))+
+  labs(x = "Age", y = "Total GERP load") +
+  facet_grid(region~., scales="free") +
+  theme(legend.position="none",
+        panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank()) -> rawdata_gerp_chick 
+
+plot_grid(gerp_per_region_yearling, rawdata_gerp_chick, 
+          ncol = 2, align = "hv", axis = "lb",
+          labels = c("A", "B"), label_fontface = "plain", label_size = 22) -> fig2
+fig2
+ggsave(fig2, file = "plots/figure_2_alternative_with_raw.png", width=14,height=10)
 
