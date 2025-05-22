@@ -10,3 +10,4 @@ for (i in 1:length(list_files)){
   n_reads <- rbind(n_reads, n_reads_i)
 } 
 
+save(n_reads, file = "output/1_relatedness/n_reads.RData")

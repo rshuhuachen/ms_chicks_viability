@@ -273,6 +273,59 @@ intervals_clean_yearling
 
 write_tsv(intervals_clean_yearling, file = "output/intervals_loads_region_yearling.tsv")
 
+
+#### Combine chick and yearling GERP posteriors ####
+
+intervals_both <- rbind(intervals, intervals_yearling)
+areas_both <- rbind(areas, areas_yearling)
+
+### plot
+
+# split by interval
+brms_both <- split(areas_both, areas_both$interval)
+
+brms_both$bottom <- brms_both$outer %>%
+  summarise(
+    ll = min(.data$x),
+    hh = max(.data$x),
+    .groups = "drop_last"
+  ) %>%
+  ungroup()
+
+##### plot total GERP load only
+brms_both$outer$parameter <- gsub ("b_ageadult", "Post-juvenile compared to chick", brms_both$outer$parameter )
+brms_both$outer$parameter <- gsub ("b_lifespan_catAdult", "Adult compared to yearling", brms_both$outer$parameter )
+
+intervals_both$parameter <- gsub ("b_ageadult", "Post-juvenile compared to chick", intervals_both$parameter)
+intervals_both$parameter <- gsub ("b_lifespan_catAdult", "Adult compared to yearling", intervals_both$parameter)
+# relevel
+intervals_both$parameter <- factor(intervals_both$parameter, levels = c("Post-juvenile compared to chick", "Adult compared to yearling"))
+brms_both$outer$parameter <- factor(brms_both$outer$parameter, levels = c("Post-juvenile compared to chick", "Adult compared to yearling"))
+
+intervals_both$region <- factor(intervals_both$region, levels = c("Intron", "Promoter", "Exon"))
+brms_both$outer$region <- factor(brms_both$outer$region, levels = c("Intron", "Promoter", "Exon"))
+
+
+ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +  
+  aes(x = .data$x, y = .data$region) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = ll, xend = hh, yend = region), col = "black")+
+  geom_point(data=subset(intervals_both, model == "GERP"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardised"~beta~" estimate"))+
+  scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
+  scale_color_manual(values =c(clr_high, clr_gerp)) +
+  facet_grid(~parameter, labeller = label_wrap_gen())+
+  xlim(-1.5,1)+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        axis.title.y = element_blank()) -> gerp_per_region_both
+gerp_per_region_both
+ggsave(gerp_per_region_both, file = "plots/figure_2_posteriors_gerp_region.png", width = 12, height = 8)
+
 #### Boxplots ####
 #### Load loads per region ####
 load("output/loads_per_region.RData")
