@@ -122,6 +122,23 @@ ggplot(n_mutations_pertype, aes(x = reorder(abb, desc(n_mutations)),
 
 fig_countsnpef_cat
 
+## simple
+snpeff_cat <- sum[c(2:5),]
+snpeff_cat$type_clean <- c("High", "Moderate", "Low", "Modifier")
+snpeff_cat$clr <- c("s", "ns", "ns", "ns")
+
+snpeff_cat$type_clean <- factor(snpeff_cat$type_clean, levels = c("Modifier", "Low", "Moderate", "High"))
+
+ggplot(snpeff_cat, aes(x = type_clean, y = n_mutations)) + geom_col(aes(fill = clr), col = "black") + 
+  labs(x = "SnpEff impact category", y= expression('Number of SNPs (log'[10]*')')) +
+  scale_y_log10(labels = c(expression(paste(~10^1)), expression(paste(~10^4)), 
+                           expression(paste(~10^7))),
+                breaks=c(10, 10000, 10000000))+
+  geom_text(aes(label = prettyNum(n_mutations, big.mark=","), y = n_mutations), 
+            hjust=1.5, size = 6) +
+  scale_fill_manual(values = c(alpha(clr_grey, 0.7), alpha(clr_high, 0.7)))+
+  coord_flip() + theme(legend.position = "none") -> simple_snpeff_cat
+
 #### c: gerp score distribution #####
 gerp <- data.frame()
 for (i in c(1:3,5:15,17:28,30)){
@@ -137,6 +154,26 @@ ggplot(gerp, aes(x = V5)) + geom_histogram(fill = clr_grey, col = "black") +
   labs(x = "GERP score", y = expression("Count (x"~10^5~")")) -> gerp_score_dist
 
 gerp_score_dist
+
+gerp_per_cat <- data.frame(cat = c("< 0", "0-1", "1-2", "2-3", "3-4", "≥ 4"),
+                           n = c(nrow(subset(gerp, V5 < 0)),
+                                   nrow(subset(gerp, V5 >= 0 & V5 < 1)),
+                                   nrow(subset(gerp, V5 >= 1 & V5 < 2)),
+                                   nrow(subset(gerp, V5 >= 2 & V5 < 3)),
+                                   nrow(subset(gerp, V5 >= 3 & V5 < 4)),
+                                 nrow(subset(gerp, V5 >= 4))),
+                           clr = c("ns", "ns", "ns", "ns", "ns", "s"))
+
+gerp_per_cat$cat <- factor(gerp_per_cat$cat, levels = c("< 0", "0-1", "1-2", "2-3", "3-4", "≥ 4"))
+
+ggplot(gerp_per_cat, aes(x = cat, y = n)) + geom_col(aes(fill = clr), col = "black") + 
+  labs(x = "GERP score category", y= expression('Number of SNPs (log'[10]*')')) +
+  scale_y_log10(limits=c(1,10000000), labels = c(expression(10^1), expression(10^3), expression(10^6)),
+                breaks=c(1, 1000,1000000)) +
+  geom_text(aes(label = prettyNum(n, big.mark=","), y = n), 
+            hjust=1.5, size = 6) +
+  scale_fill_manual(values = c(alpha(clr_grey, 0.7), alpha(clr_high, 0.7)))+
+  coord_flip() + theme(legend.position = "none") -> simple_gerp_cat
 
 #### d: gerp load distribution #####
 load(file = "output/loads.RData")
@@ -169,23 +206,22 @@ ggplot(subset(loads, loadtype == "high"), aes(x = total_load, fill = age)) + geo
 high_dist
 
 #### combine ####
-plot_grid(froh_dist, gerp_score_dist,
+plot_grid(froh_dist, gerp_dist, high_dist,
           ncol = 1, align = "hv", axis = "lb",
-          labels = c("A", "B"), label_fontface = "plain", label_size = 22) -> sup_pt1
+          labels = c("D", "E", "F"), label_fontface = "plain", label_size = 22) -> right
 
-plot_grid(sup_pt1, fig_countsnpef_cat, 
-          ncol = 2, 
-          labels = c("", "C"), label_fontface = "plain", label_size = 22) -> sup_pt2
-          
-          
-plot_grid(gerp_dist, high_dist,
+plot_grid(simple_gerp_cat, simple_snpeff_cat,  
           ncol = 2, align = "hv", axis = "lb",
-          labels = c("D", "E"), label_fontface = "plain", label_size = 22) -> sup_pt3
+          labels = c("A", "B"), label_fontface = "plain", label_size = 22) -> left_1
+          
+plot_grid(left_1, fig_countsnpef_cat, rel_heights = c(0.7, 1),
+          ncol = 1, 
+          labels = c("", "C"), label_fontface = "plain", label_size = 22) -> left_2
 
-plot_grid(sup_pt2, sup_pt3, rel_heights = c(1 ,0.5),
-          ncol = 1, #align = "hv", axis = "lb",
+plot_grid(left_2, right, rel_widths = c(1, 0.8),
+          ncol = 2, #align = "hv", axis = "lb",
           labels = c("", ""), label_fontface = "plain", label_size = 22) -> sup
 
 sup
-ggsave(sup, file = "plots/sup_fig_dist_froh_mutations.png", width=16,height=12)
+ggsave(sup, file = "plots/sup_fig_dist_froh_mutations.png", width=20,height=14)
 
