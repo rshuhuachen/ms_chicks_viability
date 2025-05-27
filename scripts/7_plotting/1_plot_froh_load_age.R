@@ -489,7 +489,7 @@ all_areas <- rbind(area_froh_chick,
                    areas_yearling_load)
 
 # rename
-all_intervals$parameter <- gsub("b_ageadult", "Post-juveniles compared to chicks", all_intervals$parameter)
+all_intervals$parameter <- gsub("b_ageadult", "Yearlings compared to chicks", all_intervals$parameter)
 all_intervals$parameter <- gsub ("b_lifespan_catadult", "Adults compared to yearlings", all_intervals$parameter)
 
 all_intervals$model <- gsub("froh", "Genomic inbreeding", all_intervals$model)
@@ -497,7 +497,7 @@ all_intervals$model <- gsub("GERP", "Total GERP load", all_intervals$model)
 all_intervals$model <- gsub("SnpEff", "Total SnpEff load", all_intervals$model)
 
 
-all_areas$parameter <- gsub("b_ageadult", "Post-juveniles compared to chicks", all_areas$parameter)
+all_areas$parameter <- gsub("b_ageadult", "Yearlings compared to chicks", all_areas$parameter)
 all_areas$parameter <- gsub ("b_lifespan_catadult", "Adults compared to yearlings", all_areas$parameter)
 
 all_areas$model <- gsub("froh", "Genomic inbreeding", all_areas$model)
@@ -514,7 +514,7 @@ brms_all$bottom <- brms_all$outer %>%
     .groups = "drop_last"
   ) %>%
   ungroup()
-
+pacman::p_load(scales)
 froh_both <- ggplot(data = subset(brms_all$outer, model == "Genomic inbreeding")) +  
   aes(x = .data$x, y = .data$parameter) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
@@ -587,20 +587,20 @@ dev.off()
 brms_all$outer$model <- factor(brms_all$outer$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
 all_intervals$model <- factor(all_intervals$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
 
-brms_all$outer$parameter <- factor(brms_all$outer$parameter, levels = c("Post-juveniles compared to chicks", "Adults compared to yearlings"))
-all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Post-juveniles compared to chicks", "Adults compared to yearlings"))
+brms_all$outer$parameter <- factor(brms_all$outer$parameter, levels = c("Yearlings compared to chicks", "Adults compared to yearlings"))
+all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Yearlings compared to chicks", "Adults compared to yearlings"))
 
-all_posteriors <- ggplot(data = brms_all$outer) +  
+all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to chicks")) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=all_intervals,  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=all_intervals, aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
-  geom_point(data=all_intervals, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to chicks"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to chicks"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
+  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to chicks"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
-  scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
-  scale_color_manual(values =c(clr_high, clr_gerp)) +
-  facet_grid(~parameter, labeller = label_wrap_gen())+
+  scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
+  scale_color_manual(values =c(clr_high)) +
+ # facet_grid(~parameter, labeller = label_wrap_gen())+
   xlim(-1.5,1.5)+
   scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
   theme(panel.border = element_blank(),
@@ -611,8 +611,36 @@ all_posteriors <- ggplot(data = brms_all$outer) +
         strip.text.x = element_text(size = 22, margin = margin(15,15, 200, 15)),
         axis.title.y = element_blank()) # element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))) 
 
-all_posteriors
+all_posteriors_a
 
+all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Adults compared to yearlings")) +  
+  aes(x = .data$x, y = .data$model) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_segment(data=subset(all_intervals, parameter == "Adults compared to yearlings"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Adults compared to yearlings"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
+  geom_point(data=subset(all_intervals, parameter == "Adults compared to yearlings"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardised"~beta~"estimate"))+
+  scale_fill_manual(values =alpha(c(clr_gerp), 0.7)) +
+  scale_color_manual(values =c(clr_gerp)) +
+  # facet_grid(~parameter, labeller = label_wrap_gen())+
+  xlim(-1.5,1.5)+
+  scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        plot.title = element_blank(),
+        strip.text.x = element_text(size = 22, margin = margin(15,15, 200, 15)),
+        axis.title.y = element_blank()) # element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))) 
+
+all_posteriors_b
+
+all_posteriors <- plot_grid(all_posteriors_a + theme(plot.margin = margin(10,1,1,1, "cm")), 
+                            all_posteriors_b + theme(plot.margin = margin(10,1,1,1, "cm")), 
+                            ncol = 2, align = "hv", axis = "lb",
+                            labels = c("A", "B"), 
+                            label_fontface = "plain", label_size = 22)
 
 png("plots/figure_1_all.png", height = 800, width = 1000)
 all_posteriors

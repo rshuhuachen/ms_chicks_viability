@@ -403,7 +403,7 @@ load_per_region$region <- gsub("Promoters", "Promoter", load_per_region$region)
 load_per_region$region <- gsub("Introns", "Intron", load_per_region$region)
 load_per_region$region <- factor(load_per_region$region, levels = c("Exon", "Promoter", "Intron"))
 
-load_per_region$age <- gsub("Adult", "Post-juvenile", load_per_region$age)
+load_per_region$age <- gsub("Adult", "Yearling", load_per_region$age)
 
 subset(load_per_region, method == "GERP ≥ 4") %>% 
   ggplot(aes(x = age, y = total_load)) + 
