@@ -7,7 +7,7 @@ load(file = "output/loads.RData")
 
 #### early life #####
 ## relevel
-loads$age <- factor(loads$age, levels = c("chick", "adult"))
+loads$age <- factor(loads$age, levels = c("adult", "chick"))
 
 ## parameters
 iter = 1000000
@@ -73,7 +73,7 @@ loads <- loads %>% mutate(lifespan_cat = as.factor(case_when(
   lifespan == 1 ~ "yearling",
   lifespan > 1 ~ "adult"
 )))
-loads$lifespan_cat <- factor(loads$lifespan_cat, levels = c("yearling", "adult"))
+loads$lifespan_cat <- factor(loads$lifespan_cat, levels = c("adult", "yearling"))
 
 ## total
 brm_gerp_yearling <- brm(scale(total_load) ~ lifespan_cat + (1|site), data = subset(loads, loadtype == "gerp"),

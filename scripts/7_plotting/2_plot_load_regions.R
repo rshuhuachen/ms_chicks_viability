@@ -35,12 +35,12 @@ diagnose_high_intron <- diagnose(fit = high_intron, modelname = "high_intron")
 ### plot ###
 
 # get intervals
-gerp_promo_interval <- mcmc_intervals_data(gerp_promo, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-gerp_exon_interval <-  mcmc_intervals_data(gerp_exon, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-gerp_intron_interval <- mcmc_intervals_data(gerp_intron, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-high_promo_interval <-  mcmc_intervals_data(high_promo, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-high_exon_interval <- mcmc_intervals_data(high_exon, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-high_intron_interval <-  mcmc_intervals_data(high_intron, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+gerp_promo_interval <- mcmc_intervals_data(gerp_promo, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+gerp_exon_interval <-  mcmc_intervals_data(gerp_exon, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+gerp_intron_interval <- mcmc_intervals_data(gerp_intron, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+high_promo_interval <-  mcmc_intervals_data(high_promo, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+high_exon_interval <- mcmc_intervals_data(high_exon, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+high_intron_interval <-  mcmc_intervals_data(high_intron, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
 
 intervals <- rbind(gerp_promo_interval,
                    gerp_exon_interval,
@@ -53,10 +53,10 @@ intervals$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEff")
 intervals$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
 
 # get areas
-gerp_promo_area <- mcmc_areas_data(gerp_promo, pars = "b_ageadult")
-gerp_exon_area <- mcmc_areas_data(gerp_exon, pars = "b_ageadult")
-gerp_intron_area <- mcmc_areas_data(gerp_intron, pars = "b_ageadult")
-high_promo_area <- mcmc_areas_data(high_promo, pars = "b_ageadult")
+gerp_promo_area <- mcmc_areas_data(gerp_promo, pars = "b_agechick")
+gerp_exon_area <- mcmc_areas_data(gerp_exon, pars = "b_agechick")
+gerp_intron_area <- mcmc_areas_data(gerp_intron, pars = "b_agechick")
+high_promo_area <- mcmc_areas_data(high_promo, pars = "b_agechick")
 high_exon_area <- mcmc_areas_data(high_exon, pars = "b_ageadult")
 high_intron_area <- mcmc_areas_data(high_intron, pars = "b_ageadult")
 

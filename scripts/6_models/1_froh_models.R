@@ -1,5 +1,5 @@
 #### Load packages ####
-pacman::p_load(brms, bayesplot, tidyverse, data.table)
+pacman::p_load(brms, bayesplot, tidyverse, data.table, lmerTest)
 
 #### Load Froh data ####
 load(file = "output/froh_chick_adult.RData")
@@ -9,7 +9,7 @@ load(file = "data/metadata/metadata_adult_chick.RData")
 
 ## merge
 froh <- left_join(froh, meta, by = "id")
-froh$age <- factor(froh$age, levels = c("chick", "adult"))
+froh$age <- factor(froh$age, levels = c("adult", "chick"))
 
 ### brms model chick vs adult ###
 ## parameters
@@ -35,7 +35,7 @@ froh <- froh %>% mutate(lifespan_cat = as.factor(case_when(
   lifespan == 1 ~ "yearling",
   lifespan > 1 ~ "adult"
 )))
-froh$lifespan_cat <- factor(froh$lifespan_cat, levels = c("yearling", "adult"))
+froh$lifespan_cat <- factor(froh$lifespan_cat, levels = c("adult", "yearling"))
 
 summary(lmerTest::lmer(scale(froh) ~ lifespan_cat + (1|site),
                        data = froh))

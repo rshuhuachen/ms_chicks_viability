@@ -13,11 +13,11 @@ load(file = "output/5_models/brm_froh_chicks.RData")
 diagnose_froh_chick <- diagnose(fit = brm_froh_chick, modelname = "froh")
 
 # get intervals
-interval_froh_chick <- mcmc_intervals_data(brm_froh_chick, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+interval_froh_chick <- mcmc_intervals_data(brm_froh_chick, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
 interval_froh_chick$model <- "froh"
 
 # get areas
-area_froh_chick <- mcmc_areas_data(brm_froh_chick, pars = "b_ageadult")
+area_froh_chick <- mcmc_areas_data(brm_froh_chick, pars = "b_agechick")
 area_froh_chick$model <- "froh"
 
 ### plot
@@ -42,7 +42,7 @@ ggplot(data = brms_froh_chick$outer) +
   geom_segment(data=interval_froh_chick, aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=interval_froh_chick, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to chicks"), y = "Density", title = "Inbreeding")+
+  labs(x = expression(beta~"estimate for chicks compared to adults"), y = "Density", title = "Inbreeding")+
   scale_y_discrete(labels = c(expression(italic(F)[ROH])))+
   # xlim(-0.6, 0.6)+
   theme(panel.border = element_blank(),
@@ -60,7 +60,7 @@ froh_chick
 load(file = "output/5_models/brm_gerp_total_chicks.RData")
 brm_gerp_chick <- brm_gerp
 load(file = "output/5_models/brm_high_total_chicks.RData")
-brm_high_chick <- brm_high_noroh
+brm_high_chick <- brm_high
 # hom
 # load(file = "output/5_models/brm_gerp_hom_chicks.RData")
 # load(file = "output/5_models/brm_high_hom_chicks.RData")
@@ -80,8 +80,8 @@ diagnose_high_chick <- diagnose(fit = brm_high_chick, modelname = "high_total")
 ### plot ###
 
 # get intervals
-gerp_interval_chick <- mcmc_intervals_data(brm_gerp_chick, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
-high_interval_chick <-  mcmc_intervals_data(brm_high_chick, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+gerp_interval_chick <- mcmc_intervals_data(brm_gerp_chick, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+high_interval_chick <-  mcmc_intervals_data(brm_high_chick, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
 # gerp_hom_interval <- mcmc_intervals_data(brm_gerp_hom, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
 # high_hom_interval <-  mcmc_intervals_data(brm_high_hom, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
 # gerp_het_interval <- mcmc_intervals_data(brm_gerp_het, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
@@ -99,8 +99,8 @@ intervals_load_chick$model <- c("GERP", "SnpEff")#, "GERP", "SnpEff", "GERP", "S
 intervals_load_chick$load <- c("Total", "Total")#, "Hom", "Hom", "Het", "Het")
 
 # get areas
-gerp_area_chick <- mcmc_areas_data(brm_gerp_chick, pars = "b_ageadult")
-high_area_chick<- mcmc_areas_data(brm_high_chick, pars = "b_ageadult")
+gerp_area_chick <- mcmc_areas_data(brm_gerp_chick, pars = "b_agechick")
+high_area_chick<- mcmc_areas_data(brm_high_chick, pars = "b_agechick")
 # gerp_hom_area <- mcmc_areas_data(brm_gerp_hom, pars = "b_ageadult")
 # high_hom_area <- mcmc_areas_data(brm_high_hom, pars = "b_ageadult")
 # gerp_het_area <- mcmc_areas_data(brm_gerp_het, pars = "b_ageadult")
@@ -165,7 +165,7 @@ ggplot(data = subset(brms_loads_chick$outer, load == "Total")) +
   geom_segment(data=subset(intervals_load_chick, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=subset(intervals_load_chick, load == "Total"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for adults compared to chicks"), y = "Density", title = "Total load")+
+  labs(x = expression(beta~"estimate for chicks compared to adults"), y = "Density", title = "Total load")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   theme(panel.border = element_blank(),
@@ -246,11 +246,11 @@ load(file = "output/5_models/brm_froh_yearling.RData")
 diagnose_froh_yearling <- diagnose(fit = brm_froh_yearling, modelname = "froh")
 
 # get intervals
-interval_froh_yearling <- mcmc_intervals_data(brm_froh_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
+interval_froh_yearling <- mcmc_intervals_data(brm_froh_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catyearling")
 interval_froh_yearling$model <- "froh"
 
 # get areas
-area_froh_yearling <- mcmc_areas_data(brm_froh_yearling, pars = "b_lifespan_catadult")
+area_froh_yearling <- mcmc_areas_data(brm_froh_yearling, pars = "b_lifespan_catyearling")
 area_froh_yearling$model <- "froh"
 
 ### plot
@@ -275,7 +275,7 @@ ggplot(data = brms_froh_yearling$outer) +
   geom_segment(data=interval_froh_yearling, aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=interval_froh_yearling, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for long- compared to short-lived males"), y = "Density", title = "Inbreeding")+
+  labs(x = expression(beta~"estimate for yearlings compared to adults"), y = "Density", title = "Inbreeding")+
   scale_y_discrete(labels = c(expression(italic(F)[ROH])))+
   # xlim(-0.6, 0.6)+
   theme(panel.border = element_blank(),
@@ -312,8 +312,8 @@ diagnose_high_yearling <- diagnose(fit = brm_high_yearling, modelname = "high_to
 ### plot ###
 
 # get intervals
-gerp_interval_yearling <- mcmc_intervals_data(brm_gerp_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
-high_interval_yearling <-  mcmc_intervals_data(brm_high_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
+gerp_interval_yearling <- mcmc_intervals_data(brm_gerp_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catyearling")
+high_interval_yearling <-  mcmc_intervals_data(brm_high_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catyearling")
 # gerp_hom_interval_yearling <- mcmc_intervals_data(brm_gerp_hom_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
 # high_hom_interval_yearling <-  mcmc_intervals_data(brm_high_hom_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
 # gerp_het_interval_yearling <- mcmc_intervals_data(brm_gerp_het_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catadult")
@@ -331,8 +331,8 @@ intervals_yearling_load$model <- c("GERP", "SnpEff")#, "GERP", "SnpEff", "GERP",
 intervals_yearling_load$load <- c("Total", "Total")#, "Hom", "Hom", "Het", "Het")
 
 # get areas
-gerp_area_yearling <- mcmc_areas_data(brm_gerp_yearling, pars = "b_lifespan_catadult")
-high_area_yearling <- mcmc_areas_data(brm_high_yearling, pars = "b_lifespan_catadult")
+gerp_area_yearling <- mcmc_areas_data(brm_gerp_yearling, pars = "b_lifespan_catyearling")
+high_area_yearling <- mcmc_areas_data(brm_high_yearling, pars = "b_lifespan_catyearling")
 # gerp_hom_area_yearling <- mcmc_areas_data(brm_gerp_hom_yearling, pars = "b_lifespan_catadult")
 # high_hom_area_yearling <- mcmc_areas_data(brm_high_hom_yearling, pars = "b_lifespan_catadult")
 # gerp_het_area_yearling <- mcmc_areas_data(brm_gerp_het_yearling, pars = "b_lifespan_catadult")
@@ -397,7 +397,7 @@ ggplot(data = subset(brms_yearling_load$outer, load == "Total")) +
   geom_segment(data=subset(intervals_yearling_load, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=subset(intervals_yearling_load, load == "Total"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~"estimate for long- compared to short-lived males"), y = "Density", title = "Total load")+
+  labs(x = expression(beta~"estimate for yearlings compared to adults"), y = "Density", title = "Total load")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   theme(panel.border = element_blank(),
@@ -489,16 +489,16 @@ all_areas <- rbind(area_froh_chick,
                    areas_yearling_load)
 
 # rename
-all_intervals$parameter <- gsub("b_ageadult", "Yearlings compared to chicks", all_intervals$parameter)
-all_intervals$parameter <- gsub ("b_lifespan_catadult", "Adults compared to yearlings", all_intervals$parameter)
+all_intervals$parameter <- gsub("b_agechick", "Chicks compared to yearlings/adults", all_intervals$parameter)
+all_intervals$parameter <- gsub ("b_lifespan_catyearling", "Yearlings compared to adults", all_intervals$parameter)
 
 all_intervals$model <- gsub("froh", "Genomic inbreeding", all_intervals$model)
 all_intervals$model <- gsub("GERP", "Total GERP load", all_intervals$model)
 all_intervals$model <- gsub("SnpEff", "Total SnpEff load", all_intervals$model)
 
 
-all_areas$parameter <- gsub("b_ageadult", "Yearlings compared to chicks", all_areas$parameter)
-all_areas$parameter <- gsub ("b_lifespan_catadult", "Adults compared to yearlings", all_areas$parameter)
+all_areas$parameter <- gsub("b_agechick", "Chicks compared to yearlings/adults", all_areas$parameter)
+all_areas$parameter <- gsub ("b_lifespan_catyearling", "Yearlings compared to adults", all_areas$parameter)
 
 all_areas$model <- gsub("froh", "Genomic inbreeding", all_areas$model)
 all_areas$model <- gsub("GERP", "Total GERP load", all_areas$model)
@@ -587,15 +587,15 @@ dev.off()
 brms_all$outer$model <- factor(brms_all$outer$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
 all_intervals$model <- factor(all_intervals$model, levels = c("Total SnpEff load", "Total GERP load", "Genomic inbreeding"))
 
-brms_all$outer$parameter <- factor(brms_all$outer$parameter, levels = c("Yearlings compared to chicks", "Adults compared to yearlings"))
-all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Yearlings compared to chicks", "Adults compared to yearlings"))
+brms_all$outer$parameter <- factor(brms_all$outer$parameter, levels = c("Chicks compared to yearlings/adults", "Yearlings compared to adults"))
+all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Chicks compared to yearlings/adults", "Yearlings compared to adults"))
 
-all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to chicks")) +  
+all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks compared to yearlings/adults")) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to chicks"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to chicks"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
-  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to chicks"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
+  geom_point(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
   scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
@@ -613,12 +613,12 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings
 
 all_posteriors_a
 
-all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Adults compared to yearlings")) +  
+all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to adults")) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(all_intervals, parameter == "Adults compared to yearlings"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(all_intervals, parameter == "Adults compared to yearlings"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
-  geom_point(data=subset(all_intervals, parameter == "Adults compared to yearlings"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
+  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
   scale_fill_manual(values =alpha(c(clr_gerp), 0.7)) +
@@ -636,7 +636,7 @@ all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Adults co
 
 all_posteriors_b
 
-all_posteriors <- plot_grid(all_posteriors_a + theme(plot.margin = margin(10,1,1,1, "cm")), 
+all_posteriors <- cowplot::plot_grid(all_posteriors_a + theme(plot.margin = margin(10,1,1,1, "cm")), 
                             all_posteriors_b + theme(plot.margin = margin(10,1,1,1, "cm")), 
                             ncol = 2, align = "hv", axis = "lb",
                             labels = c("A", "B"), 
