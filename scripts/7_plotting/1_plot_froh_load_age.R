@@ -459,18 +459,6 @@ total_load_yearling
 # fig
 # dev.off()
 
-### export intervals
-intervals_yearling_load_clean <- data.frame(parameter = intervals_yearling_load$parameter,
-                              model = intervals_yearling_load$model, 
-                              load = intervals_yearling_load$load,
-                              median = round(intervals_yearling_load$m,2),
-                              ci_95 = paste0(round(intervals_yearling_load$ll, 2),", ", round(intervals_yearling_load$hh,2)),
-                              ci_80 = paste0(round(intervals_yearling_load$l, 2),", ", round(intervals_yearling_load$h,2)))
-
-intervals_yearling_load_clean
-
-write_tsv(intervals_yearling_load_clean, file = "output/intervals_loads_yearling.tsv")
-
 
 #### Create figure: separated by froh, total gerp load, total snpeff load but put chick and yearling togehter ####
 intervals_load_chick$load <- NULL
@@ -480,6 +468,55 @@ all_intervals <- rbind(interval_froh_chick,
                        interval_froh_yearling,
                        intervals_load_chick,
                        intervals_yearling_load)
+
+all_intervals <- all_intervals %>% arrange(parameter)
+
+### export intervals
+all_intervals_clean <- data.frame(parameter = all_intervals$parameter,
+                                            model = all_intervals$model, 
+                                            median = round(all_intervals$m,2),
+                                            ci_95 = paste0(round(all_intervals$ll, 2),", ", round(all_intervals$hh,2)),
+                                            ci_80 = paste0(round(all_intervals$l, 2),", ", round(all_intervals$h,2)),
+                                  conditional_r2 = c(paste0(round(as.data.frame(r2_bayes(brm_froh_chick))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_froh_chick))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_froh_chick))$CI_high[1], 2), "]"),
+                                                     paste0(round(as.data.frame(r2_bayes(brm_gerp_chick))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_gerp_chick))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_gerp_chick))$CI_high[1], 2), "]"),
+                                                     paste0(round(as.data.frame(r2_bayes(brm_high_chick))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_high_chick))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_high_chick))$CI_high[1], 2), "]"),
+                                                     paste0(round(as.data.frame(r2_bayes(brm_froh_yearling))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_froh_yearling))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_froh_yearling))$CI_high[1], 2), "]"),
+                                                     paste0(round(as.data.frame(r2_bayes(brm_gerp_yearling))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_gerp_yearling))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_gerp_yearling))$CI_high[1], 2), "]"),
+                                                     paste0(round(as.data.frame(r2_bayes(brm_high_yearling))$R2[1], 2), " [", 
+                                                            round(as.data.frame(r2_bayes(brm_high_yearling))$CI_low[1], 2), ", ", 
+                                                            round(as.data.frame(r2_bayes(brm_high_yearling))$CI_high[1], 2), "]")),
+                                  marginal_r2 = c(paste0(round(as.data.frame(r2_bayes(brm_froh_chick))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_froh_chick))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_froh_chick))$CI_high[2], 2), "]"),
+                                                  paste0(round(as.data.frame(r2_bayes(brm_gerp_chick))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_gerp_chick))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_gerp_chick))$CI_high[2], 2), "]"),
+                                                  paste0(round(as.data.frame(r2_bayes(brm_high_chick))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_high_chick))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_high_chick))$CI_high[2], 2), "]"),
+                                                  paste0(round(as.data.frame(r2_bayes(brm_froh_yearling))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_froh_yearling))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_froh_yearling))$CI_high[2], 2), "]"),
+                                                  paste0(round(as.data.frame(r2_bayes(brm_gerp_yearling))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_gerp_yearling))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_gerp_yearling))$CI_high[2], 2), "]"),
+                                                  paste0(round(as.data.frame(r2_bayes(brm_high_yearling))$R2[2], 2), " [", 
+                                                         round(as.data.frame(r2_bayes(brm_high_yearling))$CI_low[2], 2), ", ", 
+                                                         round(as.data.frame(r2_bayes(brm_high_yearling))$CI_high[2], 2), "]")))
+
+all_intervals_clean
+
+write_tsv(all_intervals_clean, file = "output/intervals_loads_chick_yearling.tsv")
 
 areas_load_chick$load <- NULL
 areas_yearling_load$load <- NULL

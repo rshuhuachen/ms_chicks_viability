@@ -1,7 +1,7 @@
 parameter	model	region	median	ci_95	ci_80	conditional_r2	marginal_r2
-b_lifespan_catAdult	GERP	Promoter	0.29	-0.05,0.63	-0.36,0.06	0.02 [0, 0.06]	0.01 [0, 0.05]
-b_lifespan_catAdult	GERP	Exon	0.17	-0.16,0.51	-1.18,-0.79	0.06 [0, 0.12]	0.01 [0, 0.03]
-b_lifespan_catAdult	GERP	Intron	-0.19	-0.54,0.16	-0.19,0.22	0.01 [0, 0.05]	0.01 [0, 0.04]
-b_lifespan_catAdult	SnpEff	Promoter	-0.19	-0.54,0.16	-0.34,0.07	0.02 [0, 0.05]	0.01 [0, 0.04]
-b_lifespan_catAdult	SnpEff	Exon	-0.15	-0.51,0.22	0.05,0.47	0.01 [0, 0.04]	0 [0, 0.03]
-b_lifespan_catAdult	SnpEff	Intron	-0.12	-0.48,0.23	-0.02,0.4	0.01 [0, 0.04]	0 [0, 0.03]
+b_lifespan_catYearling	GERP	Promoter	-0.29	-0.65,0.04	-0.53,-0.06	0.02 [0, 0.07]	0.01 [0, 0.05]
+b_lifespan_catYearling	GERP	Exon	-0.18	-0.53,0.17	-0.4,0.05	0.06 [0, 0.13]	0.01 [0, 0.04]
+b_lifespan_catYearling	GERP	Intron	0.19	-0.15,0.54	-0.03,0.42	0.01 [0, 0.05]	0.01 [0, 0.04]
+b_lifespan_catYearling	SnpEff	Promoter	0.19	-0.18,0.52	-0.05,0.42	0.02 [0, 0.05]	0.01 [0, 0.04]
+b_lifespan_catYearling	SnpEff	Exon	0.15	-0.2,0.52	-0.08,0.38	0.01 [0, 0.04]	0 [0, 0.03]
+b_lifespan_catYearling	SnpEff	Intron	0.12	-0.23,0.47	-0.11,0.35	0.01 [0, 0.04]	0 [0, 0.03]

@@ -86,7 +86,7 @@ cowplot::plot_grid(froh_dist, fig_hist_nroh,
 cowplot::plot_grid(fig_froh_top, fig_roh_lengths,
                    ncol = 1, labels = c("", "c"), label_fontface = "plain", label_size = 22) -> fig_froh
 
-ggsave(fig_froh, file = "plots/sup_fig_inbreeding.png", width=16,height=12)
+ggsave(fig_froh, file = "plots/sup_fig_inbreeding.png", width=14,height=10)
 
 
 #### Fig 2: mutations ####

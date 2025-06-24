@@ -35,12 +35,12 @@ diagnose_high_intron <- diagnose(fit = high_intron, modelname = "high_intron")
 ### plot ###
 
 # get intervals
-gerp_promo_interval <- mcmc_intervals_data(gerp_promo, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
-gerp_exon_interval <-  mcmc_intervals_data(gerp_exon, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
-gerp_intron_interval <- mcmc_intervals_data(gerp_intron, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
-high_promo_interval <-  mcmc_intervals_data(high_promo, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
-high_exon_interval <- mcmc_intervals_data(high_exon, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
-high_intron_interval <-  mcmc_intervals_data(high_intron, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
+gerp_promo_interval <- mcmc_intervals_data(gerp_promo, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+gerp_exon_interval <-  mcmc_intervals_data(gerp_exon, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+gerp_intron_interval <- mcmc_intervals_data(gerp_intron, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+high_promo_interval <-  mcmc_intervals_data(high_promo, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+high_exon_interval <- mcmc_intervals_data(high_exon, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
+high_intron_interval <-  mcmc_intervals_data(high_intron, prob =0.8, prob_outer = 0.95, pars = "b_ageadult")
 
 intervals <- rbind(gerp_promo_interval,
                    gerp_exon_interval,
@@ -53,10 +53,10 @@ intervals$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEff")
 intervals$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
 
 # get areas
-gerp_promo_area <- mcmc_areas_data(gerp_promo, pars = "b_agechick")
-gerp_exon_area <- mcmc_areas_data(gerp_exon, pars = "b_agechick")
-gerp_intron_area <- mcmc_areas_data(gerp_intron, pars = "b_agechick")
-high_promo_area <- mcmc_areas_data(high_promo, pars = "b_agechick")
+gerp_promo_area <- mcmc_areas_data(gerp_promo, pars = "b_ageadult")
+gerp_exon_area <- mcmc_areas_data(gerp_exon, pars = "b_ageadult")
+gerp_intron_area <- mcmc_areas_data(gerp_intron, pars = "b_ageadult")
+high_promo_area <- mcmc_areas_data(high_promo, pars = "b_ageadult")
 high_exon_area <- mcmc_areas_data(high_exon, pars = "b_ageadult")
 high_intron_area <- mcmc_areas_data(high_intron, pars = "b_ageadult")
 
@@ -116,7 +116,7 @@ ggplot(data = brms$outer) +
   geom_segment(data=intervals, aes(x = ll, xend = hh, yend = model), col = "black")+
   geom_point(data=intervals, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression(beta~" for (sub)-adults compared to chicks"), y = "Density")+
+  labs(x = expression(beta~" for yearlings and adults compared to chicks"), y = "Density")+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   facet_wrap(~region, scales="free")+
@@ -207,12 +207,12 @@ diagnose_high_intron_yearling <- diagnose(fit = high_intron_yearling, modelname 
 ### plot ###
 
 # get intervals
-gerp_promo_interval_yearling <- mcmc_intervals_data(gerp_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-gerp_exon_interval_yearling <-  mcmc_intervals_data(gerp_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-gerp_intron_interval_yearling <- mcmc_intervals_data(gerp_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_promo_interval_yearling <-  mcmc_intervals_data(high_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_exon_interval_yearling <- mcmc_intervals_data(high_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
-high_intron_interval_yearling <-  mcmc_intervals_data(high_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_promo_interval_yearling <- mcmc_intervals_data(gerp_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+gerp_exon_interval_yearling <-  mcmc_intervals_data(gerp_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+gerp_intron_interval_yearling <- mcmc_intervals_data(gerp_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+high_promo_interval_yearling <-  mcmc_intervals_data(high_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+high_exon_interval_yearling <- mcmc_intervals_data(high_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+high_intron_interval_yearling <-  mcmc_intervals_data(high_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
 
 intervals_yearling <- rbind(gerp_promo_interval_yearling,
                    gerp_exon_interval_yearling,
@@ -225,12 +225,12 @@ intervals_yearling$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEf
 intervals_yearling$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
 
 # get areas
-gerp_promo_area_yearling <- mcmc_areas_data(gerp_promo_yearling, pars = "b_lifespan_catAdult")
-gerp_exon_area_yearling <- mcmc_areas_data(gerp_exon_yearling, pars = "b_lifespan_catAdult")
-gerp_intron_area_yearling <- mcmc_areas_data(gerp_intron_yearling, pars = "b_lifespan_catAdult")
-high_promo_area_yearling <- mcmc_areas_data(high_promo_yearling, pars = "b_lifespan_catAdult")
-high_exon_area_yearling <- mcmc_areas_data(high_exon_yearling, pars = "b_lifespan_catAdult")
-high_intron_area_yearling <- mcmc_areas_data(high_intron_yearling, pars = "b_lifespan_catAdult")
+gerp_promo_area_yearling <- mcmc_areas_data(gerp_promo_yearling, pars = "b_lifespan_catYearling")
+gerp_exon_area_yearling <- mcmc_areas_data(gerp_exon_yearling, pars = "b_lifespan_catYearling")
+gerp_intron_area_yearling <- mcmc_areas_data(gerp_intron_yearling, pars = "b_lifespan_catYearling")
+high_promo_area_yearling <- mcmc_areas_data(high_promo_yearling, pars = "b_lifespan_catYearling")
+high_exon_area_yearling <- mcmc_areas_data(high_exon_yearling, pars = "b_lifespan_catYearling")
+high_intron_area_yearling <- mcmc_areas_data(high_intron_yearling, pars = "b_lifespan_catYearling")
 
 areas_yearling <- rbind(gerp_promo_area_yearling,
                gerp_exon_area_yearling,
