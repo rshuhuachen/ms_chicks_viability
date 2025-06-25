@@ -1,6 +1,6 @@
 ### packages ###
 extrafont::loadfonts(device="all")
-pacman::p_load(tidyverse, data.table, brms, bayesplot, cowplot, ggsignif, ggpubr, reshape2, ggridges)
+pacman::p_load(tidyverse, data.table, brms, bayesplot, cowplot, ggsignif, ggpubr, reshape2, ggridges, performance)
 
 #### theme ####
 source("scripts/theme_ggplot.R")
@@ -207,12 +207,12 @@ diagnose_high_intron_yearling <- diagnose(fit = high_intron_yearling, modelname 
 ### plot ###
 
 # get intervals
-gerp_promo_interval_yearling <- mcmc_intervals_data(gerp_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
-gerp_exon_interval_yearling <-  mcmc_intervals_data(gerp_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
-gerp_intron_interval_yearling <- mcmc_intervals_data(gerp_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
-high_promo_interval_yearling <-  mcmc_intervals_data(high_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
-high_exon_interval_yearling <- mcmc_intervals_data(high_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
-high_intron_interval_yearling <-  mcmc_intervals_data(high_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catYearling")
+gerp_promo_interval_yearling <- mcmc_intervals_data(gerp_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_exon_interval_yearling <-  mcmc_intervals_data(gerp_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+gerp_intron_interval_yearling <- mcmc_intervals_data(gerp_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_promo_interval_yearling <-  mcmc_intervals_data(high_promo_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_exon_interval_yearling <- mcmc_intervals_data(high_exon_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
+high_intron_interval_yearling <-  mcmc_intervals_data(high_intron_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catAdult")
 
 intervals_yearling <- rbind(gerp_promo_interval_yearling,
                    gerp_exon_interval_yearling,
@@ -225,12 +225,12 @@ intervals_yearling$model <- c("GERP", "GERP", "GERP", "SnpEff", "SnpEff", "SnpEf
 intervals_yearling$region <- c("Promoter", "Exon", "Intron", "Promoter", "Exon", "Intron")
 
 # get areas
-gerp_promo_area_yearling <- mcmc_areas_data(gerp_promo_yearling, pars = "b_lifespan_catYearling")
-gerp_exon_area_yearling <- mcmc_areas_data(gerp_exon_yearling, pars = "b_lifespan_catYearling")
-gerp_intron_area_yearling <- mcmc_areas_data(gerp_intron_yearling, pars = "b_lifespan_catYearling")
-high_promo_area_yearling <- mcmc_areas_data(high_promo_yearling, pars = "b_lifespan_catYearling")
-high_exon_area_yearling <- mcmc_areas_data(high_exon_yearling, pars = "b_lifespan_catYearling")
-high_intron_area_yearling <- mcmc_areas_data(high_intron_yearling, pars = "b_lifespan_catYearling")
+gerp_promo_area_yearling <- mcmc_areas_data(gerp_promo_yearling, pars = "b_lifespan_catAdult")
+gerp_exon_area_yearling <- mcmc_areas_data(gerp_exon_yearling, pars = "b_lifespan_catAdult")
+gerp_intron_area_yearling <- mcmc_areas_data(gerp_intron_yearling, pars = "b_lifespan_catAdult")
+high_promo_area_yearling <- mcmc_areas_data(high_promo_yearling, pars = "b_lifespan_catAdult")
+high_exon_area_yearling <- mcmc_areas_data(high_exon_yearling, pars = "b_lifespan_catAdult")
+high_intron_area_yearling <- mcmc_areas_data(high_intron_yearling, pars = "b_lifespan_catAdult")
 
 areas_yearling <- rbind(gerp_promo_area_yearling,
                gerp_exon_area_yearling,
@@ -369,14 +369,14 @@ brms_both$bottom <- brms_both$outer %>%
   ungroup()
 
 ##### plot total GERP load only
-brms_both$outer$parameter <- gsub ("b_ageadult", "Post-juvenile compared to chick", brms_both$outer$parameter )
-brms_both$outer$parameter <- gsub ("b_lifespan_catAdult", "Adult compared to yearling", brms_both$outer$parameter )
+brms_both$outer$parameter <- gsub ("b_ageadult", "Yearlings and adults compared to chicks", brms_both$outer$parameter )
+brms_both$outer$parameter <- gsub ("b_lifespan_catAdult", "Adults compared to yearlings", brms_both$outer$parameter )
 
-intervals_both$parameter <- gsub ("b_ageadult", "Post-juvenile compared to chick", intervals_both$parameter)
-intervals_both$parameter <- gsub ("b_lifespan_catAdult", "Adult compared to yearling", intervals_both$parameter)
+intervals_both$parameter <- gsub ("b_ageadult", "Yearlings and adults compared to chicks", intervals_both$parameter)
+intervals_both$parameter <- gsub ("b_lifespan_catAdult", "Adults compared to yearlings", intervals_both$parameter)
 # relevel
-intervals_both$parameter <- factor(intervals_both$parameter, levels = c("Post-juvenile compared to chick", "Adult compared to yearling"))
-brms_both$outer$parameter <- factor(brms_both$outer$parameter, levels = c("Post-juvenile compared to chick", "Adult compared to yearling"))
+intervals_both$parameter <- factor(intervals_both$parameter, levels = c("Yearlings and adults compared to chicks", "Adults compared to yearlings"))
+brms_both$outer$parameter <- factor(brms_both$outer$parameter, levels = c("Yearlings and adults compared to chicks", "Adults compared to yearlings"))
 
 intervals_both$region <- factor(intervals_both$region, levels = c("Intron", "Promoter", "Exon"))
 brms_both$outer$region <- factor(brms_both$outer$region, levels = c("Intron", "Promoter", "Exon"))
@@ -419,14 +419,14 @@ meta$age <- factor(meta$age, levels = c("Chick", "Adult"))
 ### Merge
 load_per_region <- left_join(load_per_region, meta, by = "id")
 
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_exons")))
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_promoters")))
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_introns")))
-
-
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_exons")))
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_promoters")))
-summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_introns")))
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_exons")))
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_promoters")))
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_introns")))
+# 
+# 
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_exons")))
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_promoters")))
+# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_introns")))
 
 #### Merge all and plot ####
 
@@ -456,12 +456,12 @@ ggsave(compare_loads, file = "plots/load/boxplots_region_gerp_snpeff.png", width
 ### Figure 2 alternative: posteriors and raw data ####
 
 # posteriors
-ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & parameter == "Post-juvenile compared to chick")) +  
+ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & parameter == "Yearlings and adults compared to chicks")) +  
   aes(x = .data$x, y = .data$region) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
-  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = ll, xend = hh, yend = region), col = "black")+
-  geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Post-juvenile compared to chick"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Yearlings and adults compared to chicks"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Yearlings and adults compared to chicks"), aes(x = ll, xend = hh, yend = region), col = "black")+
+  geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Yearlings and adults compared to chicks"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~" estimate"))+
   scale_fill_manual(values =alpha(c(clr_high), 0.7)) +

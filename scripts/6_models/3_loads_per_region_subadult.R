@@ -32,7 +32,7 @@ load_per_region <- load_per_region %>% mutate(lifespan_cat = as.factor(case_when
   lifespan == 1 ~ "Yearling",
   lifespan > 1 ~"Adult"
 )))
-load_per_region$lifespan_cat <- factor(load_per_region$lifespan_cat, levels = c("Adult", "Yearling"))
+load_per_region$lifespan_cat <- factor(load_per_region$lifespan_cat, levels = c("Yearling", "Adult"))
 
 # subset only the relevant method/loadtype
 type = paste0(method, "_", region)
