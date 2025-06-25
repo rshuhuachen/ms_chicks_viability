@@ -22,7 +22,7 @@ load_per_region <- load_per_region %>% mutate(age = as.factor(case_when(
   grepl("D", load_per_region$id) ~ "adult"
 )))
 
-load_per_region$age <- factor(load_per_region$age, levels = c("chick", "adult"))
+load_per_region$age <- factor(load_per_region$age, levels = c("adult", "chick"))
 
 # subset only the relevant method/loadtype
 type = paste0(method, "_", region)
