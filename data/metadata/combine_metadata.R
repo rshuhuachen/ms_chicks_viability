@@ -1,8 +1,8 @@
 #combining data from Carl to chick IDs
 pacman::p_load(readxl, dplyr, lubridate)
 
-carl <- read_excel("metadata/Chick samples to send.xlsx")
-id <- read_excel("metadata/Chick_sample_list_extractions.xlsx")
+carl <- read_excel("data/metadata/Chick samples to send.xlsx")
+id <- read_excel("data/metadata/Chick_sample_list_extractions.xlsx")
 
 #combine
 chick <- left_join(id[,c(1,2,4,5,7)], carl[,c(1,4:9)], by = c("Location in box"))
