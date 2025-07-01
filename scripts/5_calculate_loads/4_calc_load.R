@@ -26,6 +26,9 @@ source("scripts/5_calculate_loads/function_calculate_load.R")
 source("scripts/theme_ggplot.R")
 
 ## calculate load
+# note that we calculate the total, homozygous and heterozygous load
+# but only the total load is used in the manuscript
+
 high_load <- calculate_load_snpeff(vcf = high, loadtype = "high", output_vcf = F)
 
 ## load metadata

@@ -285,7 +285,7 @@ plot_grid(left_1, fig_countsnpef_cat, rel_heights = c(0.7, 1),
           labels = c("", "C"), label_fontface = "plain", label_size = 22) -> left_2
 
 plot_grid(left_2, right, rel_widths = c(1, 0.8),
-          ncol = 2, #align = "hv", axis = "lb",
+          ncol = 2, 
           labels = c("", ""), label_fontface = "plain", label_size = 22) -> sup
 
 sup

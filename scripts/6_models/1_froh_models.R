@@ -18,7 +18,7 @@ burn = 500000
 thin = 1000
 
 ## total
-summary(lmerTest::lmer(scale(froh) ~ age + (1|site), data = subset(froh, id != "C09")))
+#summary(lmerTest::lmer(scale(froh) ~ age + (1|site), data = subset(froh, id != "C09")))
 
 brm_froh_chick <- brm(scale(froh) ~ age + (1|site), data = subset(froh, id != "C09"),
                       family = "gaussian",
@@ -37,8 +37,8 @@ froh <- froh %>% mutate(lifespan_cat = as.factor(case_when(
 )))
 froh$lifespan_cat <- factor(froh$lifespan_cat, levels = c("adult", "yearling"))
 
-summary(lmerTest::lmer(scale(froh) ~ lifespan_cat + (1|site),
-                       data = froh))
+# summary(lmerTest::lmer(scale(froh) ~ lifespan_cat + (1|site),
+#                        data = froh))
 
 
 brm_froh_yearling <- brm(scale(froh) ~ lifespan_cat + (1|site), data = subset(froh, id != "C09"),

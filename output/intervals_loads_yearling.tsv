@@ -1,3 +1,0 @@
-parameter	model	load	median	ci_95	ci_80
-b_lifespan_catyearling	GERP	Total	0.04	-0.32, 0.37	-0.21, 0.26
-b_lifespan_catyearling	SnpEff	Total	0.15	-0.2, 0.5	-0.08, 0.38

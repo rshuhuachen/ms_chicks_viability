@@ -2,11 +2,11 @@
 extrafont::loadfonts(device="all")
 pacman::p_load(tidyverse, data.table, brms, bayesplot, cowplot, ggsignif, ggpubr, reshape2, ggridges, performance)
 
-#### theme ####
+### theme ###
 source("scripts/theme_ggplot.R")
 source("scripts/function_diagnose_brms.R")
 
-#### Chick vs (sub)-adult ####
+#### Chick vs yearling+adult ####
 ##### load model outputs ####
 load(file = "output/5_models/per_region/brms_total_chicks_gerp_promoters.RData")
 gerp_promo <- fit
@@ -15,6 +15,8 @@ gerp_exon <- fit
 load(file = "output/5_models/per_region/brms_total_chicks_gerp_introns.RData")
 gerp_intron <- fit
 
+# note that the snpeff models were computed but not reported in the main text as 
+# nothing was significant in the total models (nor in the region-specific ones)
 load(file = "output/5_models/per_region/brms_total_chicks_high_promoters.RData")
 high_promo <- fit
 load(file = "output/5_models/per_region/brms_total_chicks_high_exons.RData")
@@ -180,6 +182,7 @@ intervals_clean
 write_tsv(intervals_clean, file = "output/intervals_loads_region_chick.tsv")
 
 #### Yearling vs adult ####
+##### load model outputs ####
 load(file = "output/5_models/per_region/brms_total_subadult_gerp_promoters.RData")
 gerp_promo_yearling <- fit
 load(file = "output/5_models/per_region/brms_total_subadult_gerp_exons.RData")
@@ -196,7 +199,7 @@ high_intron_yearling <- fit
 
 rm(fit)
 
-#### diagnose ####
+##### diagnose ####
 diagnose_gerp_promo_yearling <- diagnose(fit = gerp_promo_yearling, modelname = "gerp_promo_sa")
 diagnose_gerp_exon_yearling <- diagnose(fit = gerp_exon_yearling, modelname = "gerp_exon_sa")
 diagnose_gerp_intron_yearling <- diagnose(fit = gerp_intron_yearling, modelname = "gerp_intron_sa")
@@ -349,8 +352,8 @@ intervals_clean_yearling
 
 write_tsv(intervals_clean_yearling, file = "output/intervals_loads_region_yearling.tsv")
 
-
-#### Combine chick and yearling GERP posteriors ####
+#### Main figure for paper ####
+##### Combine chick and yearling GERP posteriors ####
 
 intervals_both <- rbind(intervals, intervals_yearling)
 areas_both <- rbind(areas, areas_yearling)
@@ -374,13 +377,13 @@ brms_both$outer$parameter <- gsub ("b_lifespan_catYearling", "Yearlings compared
 
 intervals_both$parameter <- gsub ("b_agechick", "Chicks compared to yearlings and adults", intervals_both$parameter)
 intervals_both$parameter <- gsub ("b_lifespan_catYearling", "Yearlings compared to adults", intervals_both$parameter)
+
 # relevel
 intervals_both$parameter <- factor(intervals_both$parameter, levels = c("Chicks compared to yearlings and adults", "Yearlings compared to adults"))
 brms_both$outer$parameter <- factor(brms_both$outer$parameter, levels = c("Chicks compared to yearlings and adults", "Yearlings compared to adults"))
 
 intervals_both$region <- factor(intervals_both$region, levels = c("Intron", "Promoter", "Exon"))
 brms_both$outer$region <- factor(brms_both$outer$region, levels = c("Intron", "Promoter", "Exon"))
-
 
 ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +  
   aes(x = .data$x, y = .data$region) + 
@@ -402,11 +405,11 @@ ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +
 gerp_per_region_both
 ggsave(gerp_per_region_both, file = "plots/figure_2_posteriors_gerp_region.png", width = 12, height = 8)
 
-#### Boxplots ####
-#### Load loads per region ####
+##### Boxplots ####
+## Load loads per region ###
 load("output/loads_per_region.RData")
 
-#### Load metadata ####
+### Load metadata ###
 load("data/metadata/metadata_adult_chick.RData")
 
 meta <- meta %>% mutate(age = case_when(
@@ -419,16 +422,7 @@ meta$age <- factor(meta$age, levels = c("Chick", "Adult"))
 ### Merge
 load_per_region <- left_join(load_per_region, meta, by = "id")
 
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_exons")))
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_promoters")))
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "gerp_introns")))
-# 
-# 
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_exons")))
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_promoters")))
-# summary(lmerTest::lmer(total_load ~ age + (1|year), data = subset(load_per_region, loadtype == "high_introns")))
-
-#### Merge all and plot ####
+### Merge all and plot ###
 
 load_per_region <- load_per_region %>% mutate(
   method = case_when(grepl("gerp", load_per_region$loadtype)~ "GERP ≥ 4",
@@ -439,7 +433,7 @@ load_per_region <- load_per_region %>% mutate(
                      grepl("promoters", load_per_region$loadtype)~ "Promoters",
                      grepl("exon", load_per_region$loadtype)~ "Exons"))
 
-#### Plot ####
+### Plot ###
 ggplot(load_per_region, aes(x = age, y = total_load)) + 
   geom_point(position="jitter", aes(fill = method, color = method))+
   geom_boxplot(fill = alpha("white", 0.7), outlier.shape=NA) + 
@@ -453,7 +447,7 @@ ggplot(load_per_region, aes(x = age, y = total_load)) +
 compare_loads
 ggsave(compare_loads, file = "plots/load/boxplots_region_gerp_snpeff.png", width=14,height=18)
 
-### Figure 2 alternative: posteriors and raw data ####
+##### Figure 2 for paper: posteriors and raw data ####
 
 # posteriors
 ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & parameter == "Chicks compared to yearlings and adults")) +  
@@ -487,7 +481,6 @@ subset(load_per_region, method == "GERP ≥ 4") %>%
   geom_violin(fill = alpha("white", 0.7)) + 
   theme(plot.title = element_text(margin=margin(0,0,1,0, "cm")))+
   geom_boxplot(width=0.2, fill = alpha("#8DAA91", 0.7), outlier.shape = NA)+
-#  stat_summary(fun = "median", geom = "crossbar", width = 0.5, colour = "black")+
   scale_color_manual(values = c(clr_high))+
   scale_fill_manual(values = c(clr_high))+
   labs(x = "Age class", y = "Total GERP load") +
