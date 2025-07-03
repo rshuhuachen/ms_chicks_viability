@@ -392,7 +392,7 @@ ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +
   geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = ll, xend = hh, yend = region), col = "black")+
   geom_point(data=subset(intervals_both, model == "GERP"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression("Standardised"~beta~" estimate"))+
+  labs(x = expression("Standardized"~beta~" estimate"))+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   facet_grid(~parameter, labeller = label_wrap_gen())+
@@ -413,11 +413,11 @@ load("output/loads_per_region.RData")
 load("data/metadata/metadata_adult_chick.RData")
 
 meta <- meta %>% mutate(age = case_when(
-  grepl("C", meta$id) ~ "Chick",
+  grepl("C", meta$id) ~ "Chicks",
   grepl("D", meta$id) ~ "Adult"
 ))
 
-meta$age <- factor(meta$age, levels = c("Chick", "Adult"))
+meta$age <- factor(meta$age, levels = c("Chicks", "Adult"))
 
 ### Merge
 load_per_region <- left_join(load_per_region, meta, by = "id")
@@ -457,7 +457,7 @@ ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & paramete
   geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = ll, xend = hh, yend = region), col = "black")+
   geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression("Standardised"~beta~" estimate"))+
+  labs(x = expression("Standardized"~beta~" estimate"))+
   scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
   scale_color_manual(values =c(clr_high)) +
   xlim(-1,1.5)+
