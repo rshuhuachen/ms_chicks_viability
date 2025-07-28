@@ -1,6 +1,6 @@
 # Viability selection acts against exonic conserved mutations in early life
 
-In this repository, you will find all the scripts, metadata, processed data and plots for the manuscript Viability selection acts against exonic conserved mutations in early-life (in preparation) by Chen et al.
+In this repository, you will find all the scripts, metadata, processed data and plots for the manuscript "Early-life viability selection targets deleterious mutations in exons" (in preparation) by Chen et al.
 
 Below you will find a quick guide how to navigate through this repository
 
