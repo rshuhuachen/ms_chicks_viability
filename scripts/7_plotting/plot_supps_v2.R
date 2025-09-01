@@ -1,5 +1,5 @@
 ##### Supplementary descriptive figure ####
-pacman::p_load(tidyverse, data.table)
+pacman::p_load(tidyverse, data.table, cowplot)
 source("scripts/theme_ggplot.R")
 
 ### a: froh distribution ####
@@ -17,7 +17,7 @@ froh <- froh %>% mutate(age = as.factor(case_when(
 
 froh$age <- factor(froh$age, levels = c("Chick", "Yearling", "Adult"))
 
-ggplot(froh, aes(x = froh, fill = age)) +  geom_density() +
+ggplot(froh, aes(x = froh, fill = age)) +  geom_histogram(position="dodge") +
   labs(x = expression(italic(F)[ROH]), y = "Density", fill = "Age") +
   scale_fill_manual(values = c(alpha(clrs_hunting[2], 0.7),
                                alpha(clrs_hunting[3], 0.7), 
@@ -189,7 +189,7 @@ loads <- loads %>% mutate(age = as.factor(case_when(
 
 loads$age <- factor(loads$age, levels = c("Chick", "Yearling", "Adult"))
 
-ggplot(subset(loads, loadtype == "gerp"), aes(x = total_load, fill = age)) + geom_density() +
+ggplot(subset(loads, loadtype == "gerp"), aes(x = total_load, fill = age)) + geom_histogram(position="dodge") +
   labs(x = "Total GERP load", y = "Density", fill = "Age") +
   scale_fill_manual(values = c(alpha(clrs_hunting[2], 0.7),
                                alpha(clrs_hunting[3], 0.7), 
@@ -199,7 +199,7 @@ gerp_dist
 
 #### e: snpeff load distribution #####
 
-ggplot(subset(loads, loadtype == "high"), aes(x = total_load, fill = age)) + geom_density() +
+ggplot(subset(loads, loadtype == "high"), aes(x = total_load, fill = age)) + geom_histogram(position="dodge") +
   labs(x = "Total SnpEff load", y = "Density", fill = "Age") +
   scale_fill_manual(values = c(alpha(clrs_hunting[2], 0.7),
                                alpha(clrs_hunting[3], 0.7), 
@@ -222,8 +222,8 @@ distributions$loadtype <- gsub("gerp", "Total GERP load", distributions$loadtype
 distributions$loadtype <- gsub("high", "Total SnpEff load", distributions$loadtype)
 
 
-ggplot(distributions, aes(x = value, fill = age)) + geom_density() +
-  labs(y = "Density", fill = "Age") +
+ggplot(distributions, aes(x = value, fill = age)) + geom_histogram(position="dodge", bins = 10) +
+  labs(y = "Density", fill = "Age", x = "Value") +
   facet_wrap(~loadtype, scales = "free")+
   theme(legend.position = "top",
         panel.border = element_blank(),

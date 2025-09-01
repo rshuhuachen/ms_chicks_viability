@@ -30,6 +30,7 @@ source("scripts/theme_ggplot.R")
 # but only the total load is used in the manuscript
 
 high_load <- calculate_load_snpeff(vcf = high, loadtype = "high", output_vcf = F)
+#mod_load <- calculate_load_snpeff(vcf = mod, loadtype = "mod", output_vcf = F)
 
 ## load metadata
 load("data/metadata/metadata_adult_chick.RData")
