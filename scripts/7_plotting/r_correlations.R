@@ -65,6 +65,36 @@ ggplot(loads_sum, aes(x = year, y = mean, col = age, fill = age)) +
 
 time_size
 
-ggsave(time_size, file = "plots/plot_loads_time.png", width = 12, height = 10)
+ggsave(time_size, file = "plots/plot_loads_time.png", width = 10, height = 8)
 
-  
+### differences among leks  
+
+
+loads_sum_lek <- loads %>% group_by(age, loadtype, site) %>% summarise(
+  n = n(),
+  mean = mean(total_load, na.rm=TRUE),
+  sd = sd(total_load))
+
+loads_sum_lek$age <- gsub("adult", "Adults and yearlings", loads_sum_lek$age)
+loads_sum_lek$age <- gsub("chick", "Chicks", loads_sum_lek$age)
+loads_sum_lek$loadtype <- gsub("gerp", "GERP", loads_sum_lek$loadtype)
+loads_sum_lek$loadtype <- gsub("high", "SnpEff", loads_sum_lek$loadtype)
+
+ggplot(loads_sum_lek, aes(x = site, y = mean, col = age, fill = age)) + 
+  geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
+                position=position_dodge(.9)) +
+  facet_wrap(~loadtype, ncol=1, scale="free") +
+  theme(legend.position="bottom")+
+  scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") -> lek_size
+
+lek_size
+
+ggsave(lek_size, file = "plots/plot_loads_lek.png", width = 10, height = 8)
+
+#### test if effect is still there while excluding oldest individuals to have overlapping time frames ####
+
+summary(lmerTest::lmer(scale(total_load) ~ age + (1|site), data = subset(loads, loadtype == "gerp" & year >= 2002)))
+summary(lmerTest::lmer(scale(total_load) ~ age + (1|site), data = subset(loads, loadtype == "gerp")))

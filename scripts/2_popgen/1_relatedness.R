@@ -59,3 +59,46 @@ unknown <- subset(gen, criteria == "Unknown")
 unknown$kinship
 
 #C09 and D229192 are probably the same individual
+
+#### Clean up for checking parents of chicks ####
+
+# select relevant only
+clean_gen <- gen%>%select(c(IID1, IID2, Z0, Z1, PI_HAT, kinship, criteria))
+
+# change names
+## load headers
+names <- fread("output/2_inbreeding/chicks_adults_samples.txt", header = F)
+names(names) <- "file_id"
+
+## load id info
+# add real id
+ids <- read.csv("data/metadata/file_list_all_bgi_clean.csv")
+ids$file_id <- gsub(".sorted.bam", "", ids$file)
+names <- left_join(names, ids[,c("file_id", "id")], by = c("file_id"))
+names <- names %>% mutate(id = case_when(
+  is.na(id) ~ file_id,
+  TRUE ~ id
+))
+
+# clean
+clean_gen$IID1 <- gsub("/vol/cluster-data/rchen/wgr/data/processed/alignments_dovetailrefgenome/sorted_bamfiles/", "", clean_gen$IID1)
+clean_gen$IID2 <- gsub("/vol/cluster-data/rchen/wgr/data/processed/alignments_dovetailrefgenome/sorted_bamfiles/", "", clean_gen$IID2)
+clean_gen$IID1 <- gsub("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/", "", clean_gen$IID1)
+clean_gen$IID2 <- gsub("/vol/cluster-data/rchen/wgr/chicks_genomes/output/processed/", "", clean_gen$IID2)
+
+clean_gen <- left_join(clean_gen, ids[,c("file", "id")], by = c("IID1" = "file"))
+clean_gen <- left_join(clean_gen, ids[,c("file", "id")], by = c("IID2" = "file"))
+
+clean_gen <- clean_gen %>% mutate(ID1 = case_when(is.na(id.x) ~ IID1,
+                                                  !is.na(id.x) ~ id.x),
+                                  ID2 = case_when(is.na(id.y) ~ IID2,
+                                                  !is.na(id.y) ~ id.y))
+
+clean_gen <- clean_gen %>% select(ID1, ID2, Z0:criteria)
+clean_gen$ID1 <- gsub(".sorted.bam", "", clean_gen$ID1)
+clean_gen$ID2 <- gsub(".sorted.bam", "", clean_gen$ID2)
+
+gen_chick <- subset(clean_gen, (grepl("C", clean_gen$ID1) | grepl("C", clean_gen$ID2)) & criteria == "Parent-offspring")
+
+# in reverse to see if it matches
+gen_adult <- subset(clean_gen, (grepl("D", clean_gen$ID1) | grepl("D", clean_gen$ID2)) & criteria == "Parent-offspring")
