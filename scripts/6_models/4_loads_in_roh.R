@@ -158,7 +158,7 @@ ggplot(froh_load, aes(x = froh, y = froh_load_high)) + geom_point(size=3, col = 
   geom_smooth(method='lm', col = clr_high) + 
   labs(x = expression(F[ROH]), y = "# SnpEff mutations in ROH")-> load_in_roh_high
 
-plot_grid(load_in_roh_gerp, load_in_roh_high, ncol = 2, align = "hv", axis = "lb",
+plot_grid(load_in_roh_gerp, load_in_roh_high, ncol = 1, align = "hv", axis = "lb",
           labels = c("A", "B"), 
           label_fontface = "plain", label_size = 22) -> load_in_roh_plot
 
