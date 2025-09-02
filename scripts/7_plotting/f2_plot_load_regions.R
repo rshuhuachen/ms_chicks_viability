@@ -27,12 +27,12 @@ high_intron <- fit
 rm(fit)
 
 ##### diagnose ####
-diagnose_gerp_promo <- diagnose(fit = gerp_promo, modelname = "gerp_promo")
-diagnose_gerp_exon <- diagnose(fit = gerp_exon, modelname = "gerp_exon")
-diagnose_gerp_intron <- diagnose(fit = gerp_intron, modelname = "gerp_intron")
-diagnose_high_promo <- diagnose(fit = high_promo, modelname = "high_promo")
-diagnose_high_exon <- diagnose(fit = high_exon, modelname = "high_exon")
-diagnose_high_intron <- diagnose(fit = high_intron, modelname = "high_intron")
+# diagnose_gerp_promo <- diagnose(fit = gerp_promo, modelname = "gerp_promo")
+# diagnose_gerp_exon <- diagnose(fit = gerp_exon, modelname = "gerp_exon")
+# diagnose_gerp_intron <- diagnose(fit = gerp_intron, modelname = "gerp_intron")
+# diagnose_high_promo <- diagnose(fit = high_promo, modelname = "high_promo")
+# diagnose_high_exon <- diagnose(fit = high_exon, modelname = "high_exon")
+# diagnose_high_intron <- diagnose(fit = high_intron, modelname = "high_intron")
 
 ### plot ###
 
@@ -200,12 +200,12 @@ high_intron_yearling <- fit
 rm(fit)
 
 ##### diagnose ####
-diagnose_gerp_promo_yearling <- diagnose(fit = gerp_promo_yearling, modelname = "gerp_promo_sa")
-diagnose_gerp_exon_yearling <- diagnose(fit = gerp_exon_yearling, modelname = "gerp_exon_sa")
-diagnose_gerp_intron_yearling <- diagnose(fit = gerp_intron_yearling, modelname = "gerp_intron_sa")
-diagnose_high_promo_yearling <- diagnose(fit = high_promo_yearling, modelname = "high_promo_sa")
-diagnose_high_exon_yearling <- diagnose(fit = high_exon_yearling, modelname = "high_exon_sa")
-diagnose_high_intron_yearling <- diagnose(fit = high_intron_yearling, modelname = "high_intron_sa")
+# diagnose_gerp_promo_yearling <- diagnose(fit = gerp_promo_yearling, modelname = "gerp_promo_sa")
+# diagnose_gerp_exon_yearling <- diagnose(fit = gerp_exon_yearling, modelname = "gerp_exon_sa")
+# diagnose_gerp_intron_yearling <- diagnose(fit = gerp_intron_yearling, modelname = "gerp_intron_sa")
+# diagnose_high_promo_yearling <- diagnose(fit = high_promo_yearling, modelname = "high_promo_sa")
+# diagnose_high_exon_yearling <- diagnose(fit = high_exon_yearling, modelname = "high_exon_sa")
+# diagnose_high_intron_yearling <- diagnose(fit = high_intron_yearling, modelname = "high_intron_sa")
 
 ### plot ###
 
@@ -388,9 +388,11 @@ brms_both$outer$region <- factor(brms_both$outer$region, levels = c("Intron", "P
 ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +  
   aes(x = .data$x, y = .data$region) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
-  geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = ll, xend = hh, yend = region), col = "black")+
-  geom_point(data=subset(intervals_both, model == "GERP"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+  #geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = ll, xend = hh, yend = region), col = "black", linewidth=1.5, 
+               position=position_nudge(y = -0.1))+
+  geom_point(data=subset(intervals_both, model == "GERP"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6,
+             position=position_nudge(y = -0.1)) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardized"~beta~" estimate"))+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
@@ -453,9 +455,12 @@ ggsave(compare_loads, file = "plots/load/boxplots_region_gerp_snpeff.png", width
 ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & parameter == "Chicks compared to yearlings and adults")) +  
   aes(x = .data$x, y = .data$region) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
-  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = ll, xend = hh, yend = region), col = "black")+
-  geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+ # geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), 
+               aes(x = ll, xend = hh, yend = region), col = "black", linewidth=1.5, position=position_nudge(y = -0.1))+
+  geom_point(data=subset(intervals_both, model == "GERP"& parameter == "Chicks compared to yearlings and adults"), 
+             aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6,
+             position=position_nudge(y = -0.1)) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardized"~beta~" estimate"))+
   scale_fill_manual(values =alpha(c(clr_high), 0.7)) +

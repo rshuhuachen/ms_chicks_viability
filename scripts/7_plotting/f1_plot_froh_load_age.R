@@ -431,9 +431,13 @@ all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Chicks co
 all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks compared to yearlings/adults")) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
-  geom_point(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+ # geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), 
+               aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1.5, 
+               position=position_nudge(y = -0.1))+
+  geom_point(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), 
+             aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6,
+             position=position_nudge(y = -0.1)) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
   scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
@@ -453,9 +457,13 @@ all_posteriors_a
 all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to adults")) +  
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
-  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+ # geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"), 
+               aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1.5, 
+               position=position_nudge(y = -0.1))+
+  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = m, y = model), 
+             fill="white",  col = "black", shape=21, size = 6,
+             position=position_nudge(y = -0.1)) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
   scale_fill_manual(values =alpha(c(clr_gerp), 0.7)) +
