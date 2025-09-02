@@ -11,7 +11,7 @@ source("scripts/function_diagnose_brms.R")
 load(file = "output/5_models/brm_froh_chicks.RData")
 
 # diagnose the model
-diagnose_froh_chick <- diagnose(fit = brm_froh_chick, modelname = "froh")
+#diagnose_froh_chick <- diagnose(fit = brm_froh_chick, modelname = "froh")
 
 # get intervals
 interval_froh_chick <- mcmc_intervals_data(brm_froh_chick, prob =0.8, prob_outer = 0.95, pars = "b_agechick")
@@ -40,7 +40,7 @@ ggplot(data = brms_froh_chick$outer) +
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density), fill = clr_froh, col = clr_froh)+
   geom_segment(data=interval_froh_chick, aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=interval_froh_chick, aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_segment(data=interval_froh_chick, aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1)+
   geom_point(data=interval_froh_chick, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression(beta~"estimate for chicks compared to adults"), y = "Density", title = "Inbreeding")+
@@ -65,8 +65,8 @@ brm_high_chick <- brm_high
 
 ##### diagnose ####
 source("scripts/function_diagnose_brms.R")
-diagnose_gerp_chick <- diagnose(fit = brm_gerp_chick, modelname = "gerp_total")
-diagnose_high_chick <- diagnose(fit = brm_high_chick, modelname = "high_total")
+#diagnose_gerp_chick <- diagnose(fit = brm_gerp_chick, modelname = "gerp_total")
+#diagnose_high_chick <- diagnose(fit = brm_high_chick, modelname = "high_total")
 
 ### plot ###
 
@@ -119,7 +119,7 @@ ggplot(data = subset(brms_loads_chick$outer, load == "Total")) +
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
   geom_segment(data=subset(intervals_load_chick, load == "Total"), aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(intervals_load_chick, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_segment(data=subset(intervals_load_chick, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black",linewidth=1)+
   geom_point(data=subset(intervals_load_chick, load == "Total"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression(beta~"estimate for chicks compared to adults"), y = "Density", title = "Total load")+
@@ -148,7 +148,7 @@ write_tsv(intervals_load_chick_clean, file = "output/intervals_chick_loads.tsv")
 #### inbreeding depression ####
 load(file = "output/5_models/brm_froh_yearling.RData")
 
-diagnose_froh_yearling <- diagnose(fit = brm_froh_yearling, modelname = "froh")
+#diagnose_froh_yearling <- diagnose(fit = brm_froh_yearling, modelname = "froh")
 
 # get intervals
 interval_froh_yearling <- mcmc_intervals_data(brm_froh_yearling, prob =0.8, prob_outer = 0.95, pars = "b_lifespan_catyearling")
@@ -177,7 +177,7 @@ ggplot(data = brms_froh_yearling$outer) +
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density), fill = clr_froh, col = clr_froh)+
   geom_segment(data=interval_froh_yearling, aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=interval_froh_yearling, aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_segment(data=interval_froh_yearling, aes(x = ll, xend = hh, yend = model), col = "black",linewidth=1)+
   geom_point(data=interval_froh_yearling, aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression(beta~"estimate for yearlings compared to adults"), y = "Density", title = "Inbreeding")+
@@ -196,8 +196,8 @@ load(file = "output/5_models/brm_high_total_yearlings.RData")
 
 ##### diagnose ####
 source("scripts/function_diagnose_brms.R")
-diagnose_gerp_yearling <- diagnose(fit = brm_gerp_yearling, modelname = "gerp_total_yearling")
-diagnose_high_yearling <- diagnose(fit = brm_high_yearling, modelname = "high_total_yearling")
+#diagnose_gerp_yearling <- diagnose(fit = brm_gerp_yearling, modelname = "gerp_total_yearling")
+#diagnose_high_yearling <- diagnose(fit = brm_high_yearling, modelname = "high_total_yearling")
 
 ### plot ###
 
@@ -250,7 +250,7 @@ ggplot(data = subset(brms_yearling_load$outer, load == "Total")) +
   aes(x = .data$x, y = .data$model) + 
   geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
   geom_segment(data=subset(intervals_yearling_load, load == "Total"), aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(intervals_yearling_load, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_segment(data=subset(intervals_yearling_load, load == "Total"), aes(x = ll, xend = hh, yend = model), col = "black",linewidth=1)+
   geom_point(data=subset(intervals_yearling_load, load == "Total"), aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression(beta~"estimate for yearlings compared to adults"), y = "Density", title = "Total load")+

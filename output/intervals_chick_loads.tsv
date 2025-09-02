@@ -1,0 +1,3 @@
+parameter	model	load	median	ci_95	ci_80
+b_agechick	GERP	Total	0.63	0.32, 0.94	0.42, 0.83
+b_agechick	SnpEff	Total	-0.17	-0.49, 0.15	-0.38, 0.03

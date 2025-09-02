@@ -223,7 +223,7 @@ distributions$loadtype <- gsub("high", "Total SnpEff load", distributions$loadty
 
 
 ggplot(distributions, aes(x = value, fill = age)) + geom_histogram(position="dodge", bins = 10) +
-  labs(y = "Density", fill = "Age", x = "Value") +
+  labs(y = "Count", fill = "Age", x = "Value") +
   facet_wrap(~loadtype, scales = "free")+
   theme(legend.position = "top",
         panel.border = element_blank(),
