@@ -53,7 +53,8 @@ loads_sum$age <- gsub("chick", "Chicks", loads_sum$age)
 loads_sum$loadtype <- gsub("gerp", "GERP", loads_sum$loadtype)
 loads_sum$loadtype <- gsub("high", "SnpEff", loads_sum$loadtype)
 
-ggplot(loads_sum, aes(x = year, y = mean, col = age, fill = age)) + geom_point(shape=21, aes(size = n)) + 
+ggplot(loads_sum, aes(x = year, y = mean, col = age, fill = age)) + 
+  geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
   geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
                 position=position_dodge(.9)) +
   facet_wrap(~loadtype, ncol=1, scale="free") +
@@ -61,6 +62,8 @@ ggplot(loads_sum, aes(x = year, y = mean, col = age, fill = age)) + geom_point(s
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
   labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") -> time_size
+
+time_size
 
 ggsave(time_size, file = "plots/plot_loads_time.png", width = 12, height = 10)
 
