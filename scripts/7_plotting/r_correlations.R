@@ -53,19 +53,47 @@ loads_sum$age <- gsub("chick", "Chicks", loads_sum$age)
 loads_sum$loadtype <- gsub("gerp", "GERP", loads_sum$loadtype)
 loads_sum$loadtype <- gsub("high", "SnpEff", loads_sum$loadtype)
 
-ggplot(loads_sum, aes(x = year, y = mean, col = age, fill = age)) + 
+loads_sum$age <- factor(loads_sum$age, levels = c("Chicks", "Adults and yearlings"))
+ggplot(subset(loads_sum, loadtype=="GERP"), aes(x = year, y = mean, col = age, fill = age)) + 
   geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
   geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
                 position=position_dodge(.9)) +
-  facet_wrap(~loadtype, ncol=1, scale="free") +
+ # facet_wrap(~loadtype, ncol=1, scale="free") +
   theme(legend.position="bottom")+
-  scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
-  scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") -> time_size
+  scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size",
+       title = "GERP") +
+  theme( panel.spacing = unit(3,"lines"))+
+  guides(fill  = guide_legend(order = 1),
+         col = guide_legend(order=1),
+         size = guide_legend(order = 2))-> time_size_gerp
 
-time_size
+time_size_gerp
 
-ggsave(time_size, file = "plots/plot_loads_time.png", width = 10, height = 8)
+ggplot(subset(loads_sum, loadtype=="SnpEff"), aes(x = year, y = mean, col = age, fill = age)) + 
+  geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
+                position=position_dodge(.9)) +
+  # facet_wrap(~loadtype, ncol=1, scale="free") +
+  theme(legend.position="bottom")+
+  scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size",
+       title = "SnpEff") +
+  theme( panel.spacing = unit(3,"lines"))+
+  guides(fill  = guide_legend(order = 1),
+         col = guide_legend(order=1),
+         size = guide_legend(order = 2))-> time_size_high
+
+time_size_high
+
+plot_grid(time_size_gerp, time_size_high,
+          ncol = 1, 
+          labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_time
+sup_time
+
+ggsave(sup_time, file = "plots/plot_loads_time.png", width = 10, height = 8)
 
 ### differences among leks  
 
@@ -79,20 +107,44 @@ loads_sum_lek$age <- gsub("adult", "Adults and yearlings", loads_sum_lek$age)
 loads_sum_lek$age <- gsub("chick", "Chicks", loads_sum_lek$age)
 loads_sum_lek$loadtype <- gsub("gerp", "GERP", loads_sum_lek$loadtype)
 loads_sum_lek$loadtype <- gsub("high", "SnpEff", loads_sum_lek$loadtype)
+loads_sum_lek$age <- factor(loads_sum_lek$age, levels = c("Chicks", "Adults and yearlings"))
 
-ggplot(loads_sum_lek, aes(x = site, y = mean, col = age, fill = age)) + 
+ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = age, fill = age)) + 
   geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
   geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
                 position=position_dodge(.9)) +
-  facet_wrap(~loadtype, ncol=1, scale="free") +
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") -> lek_size
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP")+
+  theme( panel.spacing = unit(3,"lines"))+
+  guides(fill  = guide_legend(order = 1),
+         col = guide_legend(order=1),
+         size = guide_legend(order = 2))-> lek_size_gerp
 
-lek_size
+lek_size_gerp
 
-ggsave(lek_size, file = "plots/plot_loads_lek.png", width = 10, height = 8)
+ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = age, fill = age)) + 
+  geom_point(shape=21, aes(size = n), position=position_dodge(.9)) + 
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
+                position=position_dodge(.9)) +
+  theme(legend.position="bottom")+
+  scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "SnpEff")+
+  theme( panel.spacing = unit(3,"lines"))+
+  guides(fill  = guide_legend(order = 1),
+         col = guide_legend(order=1),
+         size = guide_legend(order = 2))-> lek_size_high
+
+lek_size_high
+
+plot_grid(lek_size_gerp, lek_size_high,
+          ncol = 1, 
+          labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_lek
+sup_lek
+
+ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 10, height = 8)
 
 #### test if effect is still there while excluding oldest individuals to have overlapping time frames ####
 
