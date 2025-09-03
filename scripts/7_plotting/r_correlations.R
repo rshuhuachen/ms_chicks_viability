@@ -93,7 +93,7 @@ plot_grid(time_size_gerp, time_size_high,
           labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_time
 sup_time
 
-ggsave(sup_time, file = "plots/plot_loads_time.png", width = 10, height = 8)
+ggsave(sup_time, file = "plots/plot_loads_time.png", width = 12, height = 10)
 
 ### differences among leks  
 
@@ -144,7 +144,7 @@ plot_grid(lek_size_gerp, lek_size_high,
           labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_lek
 sup_lek
 
-ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 10, height = 8)
+ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
 
 #### test if effect is still there while excluding oldest individuals to have overlapping time frames ####
 
