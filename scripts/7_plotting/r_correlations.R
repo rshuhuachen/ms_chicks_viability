@@ -63,7 +63,8 @@ ggplot(subset(loads_sum, loadtype=="GERP"), aes(x = year, y = mean, col = age, f
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
   labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
-  theme( panel.spacing = unit(3,"lines"))+
+  theme( plot.margin = margin(2,1,1,1, "cm"),
+         panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
          size = guide_legend(order = 2))-> time_size_gerp
@@ -79,7 +80,8 @@ ggplot(subset(loads_sum, loadtype=="SnpEff"), aes(x = year, y = mean, col = age,
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
   labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
-  theme( panel.spacing = unit(3,"lines"))+
+  theme( panel.spacing = unit(3,"lines"),
+         plot.margin = margin(2,1,1,1, "cm"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
          size = guide_legend(order = 2))-> time_size_high
@@ -171,7 +173,7 @@ ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = ag
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
   labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
-  theme( panel.spacing = unit(3,"lines"))+
+  theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
          size = guide_legend(order = 2))-> lek_size_gerp
@@ -186,7 +188,7 @@ ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = 
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
   labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
-  theme( panel.spacing = unit(3,"lines"))+
+  theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
          size = guide_legend(order = 2))-> lek_size_high
