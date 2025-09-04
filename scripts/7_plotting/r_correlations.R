@@ -62,8 +62,7 @@ ggplot(subset(loads_sum, loadtype=="GERP"), aes(x = year, y = mean, col = age, f
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size",
-       title = "GERP") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
   theme( panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -79,8 +78,7 @@ ggplot(subset(loads_sum, loadtype=="SnpEff"), aes(x = year, y = mean, col = age,
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size",
-       title = "SnpEff") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
   theme( panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -90,13 +88,69 @@ time_size_high
 
 plot_grid(time_size_gerp, time_size_high,
           ncol = 1, 
-          labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_time
+          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_time
 sup_time
 
 ggsave(sup_time, file = "plots/plot_loads_time.png", width = 12, height = 10)
 
-### differences among leks  
+# model
+summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& age == "chick")))
+summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& age == "adult")))
+summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& lifespan_cat == "yearling")))
+summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& lifespan_cat == "adult")))
 
+summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& age == "chick")))
+summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& age == "adult")))
+summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& lifespan_cat == "yearling")))
+summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& lifespan_cat == "adult")))
+
+#bayesian
+## parameters
+iter = 1000000
+burn = 500000
+thin = 1000
+
+## total
+brm_gerp_year <- brm(total_load ~ year, data = subset(loads, loadtype == "gerp"),
+                family = "gaussian",
+                prior = prior(normal(0,1), class = b),
+                cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                iter = iter, thin = thin, warmup = burn, seed = 1908)
+save(brm_gerp_year, file = "output/5_models/brm_gerp_year.RData")
+
+mcmc_intervals_data(brm_gerp_year, prob =0.8, prob_outer = 0.95)
+
+brm_snpeff_year <- brm(total_load ~ year, data = subset(loads, loadtype == "high"),
+                     family = "gaussian",
+                     prior = prior(normal(0,1), class = b),
+                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                     iter = iter, thin = thin, warmup = burn, seed = 1908)
+
+save(brm_snpeff_year, file = "output/5_models/brm_high_year.RData")
+
+mcmc_intervals_data(brm_snpeff_year, prob =0.8, prob_outer = 0.95)
+
+brm_gerp_site <- brm(total_load ~ site, data = subset(loads, loadtype == "gerp"),
+                     family = "gaussian",
+                     prior = prior(normal(0,1), class = b),
+                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                     iter = iter, thin = thin, warmup = burn, seed = 1908)
+
+save(brm_gerp_site, file = "output/5_models/brm_gerp_site.RData")
+
+mcmc_intervals_data(brm_gerp_site, prob =0.8, prob_outer = 0.95)
+
+brm_high_site <- brm(total_load ~ site, data = subset(loads, loadtype == "high"),
+                     family = "gaussian",
+                     prior = prior(normal(0,1), class = b),
+                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                     iter = iter, thin = thin, warmup = burn, seed = 1908)
+
+save(brm_high_site, file = "output/5_models/brm_high_site.RData")
+
+mcmc_intervals_data(brm_high_site, prob =0.8, prob_outer = 0.95)
+
+### differences among leks  
 
 loads_sum_lek <- loads %>% group_by(age, loadtype, site) %>% summarise(
   n = n(),
@@ -116,7 +170,7 @@ ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = ag
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
   theme( panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -131,7 +185,7 @@ ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = 
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "SnpEff")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
   theme( panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -141,7 +195,7 @@ lek_size_high
 
 plot_grid(lek_size_gerp, lek_size_high,
           ncol = 1, 
-          labels = "AUTO", label_fontface = "plain", label_size = 22) -> sup_lek
+          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
 sup_lek
 
 ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
