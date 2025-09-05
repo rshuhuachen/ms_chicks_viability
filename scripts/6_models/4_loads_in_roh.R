@@ -167,35 +167,3 @@ ggsave(load_in_roh_plot, file = "plots/load_in_ROH.png", width=12, height=10)
 cor.test(froh_load$froh, froh_load$froh_load_gerp)
 cor.test(froh_load$froh, froh_load$froh_load_high)
 
-
-### modell effects
-load(file = "output/loads.RData")
-
-#### early life #####
-## relevel
-froh_load$age <- factor(froh_load$age, levels = c("adult", "chick"))
-froh_load <- left_join(froh_load, loads[,c("id", "site", "year")])
-summary(lmerTest::lmer(froh_load_gerp ~ age + (1|site), data = froh_load))
-summary(lmerTest::lmer(froh_load_high ~ age + (1|site), data = froh_load))
-froh_load <- unique(froh_load)
-
-brm_gerp_chick_hom_roh <- brm(scale(froh_load_gerp) ~ age + (1|site), data = froh_load, 
-                             family = "gaussian",
-                             prior = prior(normal(0,1), class = b),
-                             cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
-                             iter = iter, thin = thin, warmup = burn, seed = 1908)
-
-mcmc_intervals(brm_gerp_chick_hom_roh, pars=c("b_age_chick"), prob =0.8, prob_outer = 0.95)
-
-### late life
-load("data/phenotypic/phenotypes_lifetime.RData")
-froh_load <- left_join(froh_load, pheno_wide[,c("id", "lifespan")], by = "id")
-froh_load <- froh_load %>% mutate(lifespan_cat = as.factor(case_when(
-  lifespan == 1 ~ "yearling",
-  lifespan > 1 ~ "adult"
-)))
-froh_load$lifespan_cat <- factor(froh_load$lifespan_cat, levels = c("adult", "yearling"))
-
-summary(lmerTest::lmer(froh_load_gerp ~ lifespan_cat + (1|site), data = froh_load))
-summary(lmerTest::lmer(froh_load_high ~ lifespan_cat + (1|site), data = froh_load))
-

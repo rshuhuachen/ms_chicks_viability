@@ -1,6 +1,10 @@
+#### Scripts for plots created during revision ####
+
 pacman::p_load(brms, tidyverse, bayesplot, ggridges)
 source("scripts/theme_ggplot.R")
 
+
+### Correlation of the two loads ####
 ## load data
 load(file = "output/loads.RData")
 
@@ -29,7 +33,7 @@ ggsave(plot_cor_loads, file = "plots/compare_loads_gerp_high.png", width = 10, h
 cor.test(load_wide$total_load.x[which(load_wide$age.x=="Chicks")], load_wide$total_load.y[which(load_wide$age.x=="Chicks")])
 
 
-### loads over time ###
+#### Loads over time ####
 
 loads$age <- factor(loads$age, levels = c("adult", "chick"))
 load("data/phenotypic/phenotypes_lifetime.RData")
@@ -95,18 +99,8 @@ sup_time
 
 ggsave(sup_time, file = "plots/plot_loads_time.png", width = 12, height = 10)
 
-# model
-summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& age == "chick")))
-summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& age == "adult")))
-summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& lifespan_cat == "yearling")))
-summary(lm(total_load ~ year, data = subset(loads, loadtype=="gerp"& lifespan_cat == "adult")))
+## model
 
-summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& age == "chick")))
-summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& age == "adult")))
-summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& lifespan_cat == "yearling")))
-summary(lm(total_load ~ site, data = subset(loads, loadtype=="gerp"& lifespan_cat == "adult")))
-
-#bayesian
 ## parameters
 iter = 1000000
 burn = 500000
@@ -118,7 +112,7 @@ brm_gerp_year <- brm(total_load ~ year, data = subset(loads, loadtype == "gerp")
                 prior = prior(normal(0,1), class = b),
                 cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
                 iter = iter, thin = thin, warmup = burn, seed = 1908)
-save(brm_gerp_year, file = "output/5_models/brm_gerp_year.RData")
+save(brm_gerp_year, file = "output/5_models/brm_gerp_year.RData") # do model checks with function_diagnose_brms.R script in ./scripts
 
 mcmc_intervals_data(brm_gerp_year, prob =0.8, prob_outer = 0.95)
 
@@ -132,27 +126,7 @@ save(brm_snpeff_year, file = "output/5_models/brm_high_year.RData")
 
 mcmc_intervals_data(brm_snpeff_year, prob =0.8, prob_outer = 0.95)
 
-brm_gerp_site <- brm(total_load ~ site, data = subset(loads, loadtype == "gerp"),
-                     family = "gaussian",
-                     prior = prior(normal(0,1), class = b),
-                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
-                     iter = iter, thin = thin, warmup = burn, seed = 1908)
-
-save(brm_gerp_site, file = "output/5_models/brm_gerp_site.RData")
-
-mcmc_intervals_data(brm_gerp_site, prob =0.8, prob_outer = 0.95)
-
-brm_high_site <- brm(total_load ~ site, data = subset(loads, loadtype == "high"),
-                     family = "gaussian",
-                     prior = prior(normal(0,1), class = b),
-                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
-                     iter = iter, thin = thin, warmup = burn, seed = 1908)
-
-save(brm_high_site, file = "output/5_models/brm_high_site.RData")
-
-mcmc_intervals_data(brm_high_site, prob =0.8, prob_outer = 0.95)
-
-### differences among leks  
+#### differences among leks ####
 
 loads_sum_lek <- loads %>% group_by(age, loadtype, site) %>% summarise(
   n = n(),
@@ -201,6 +175,28 @@ plot_grid(lek_size_gerp, lek_size_high,
 sup_lek
 
 ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
+
+## modelling
+
+brm_gerp_site <- brm(total_load ~ site, data = subset(loads, loadtype == "gerp"),
+                     family = "gaussian",
+                     prior = prior(normal(0,1), class = b),
+                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                     iter = iter, thin = thin, warmup = burn, seed = 1908)
+
+save(brm_gerp_site, file = "output/5_models/brm_gerp_site.RData")
+
+mcmc_intervals_data(brm_gerp_site, prob =0.8, prob_outer = 0.95)
+
+brm_high_site <- brm(total_load ~ site, data = subset(loads, loadtype == "high"),
+                     family = "gaussian",
+                     prior = prior(normal(0,1), class = b),
+                     cores =8, control = list(adapt_delta = 0.99, max_treedepth = 15),
+                     iter = iter, thin = thin, warmup = burn, seed = 1908)
+
+save(brm_high_site, file = "output/5_models/brm_high_site.RData")
+
+mcmc_intervals_data(brm_high_site, prob =0.8, prob_outer = 0.95)
 
 #### test if effect is still there while excluding oldest individuals to have overlapping time frames ####
 
