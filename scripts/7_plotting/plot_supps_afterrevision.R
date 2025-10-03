@@ -94,7 +94,7 @@ time_size_high
 
 plot_grid(time_size_gerp, time_size_high,
           ncol = 1, 
-          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_time
+          labels = c("C) GERP", "D) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_time
 sup_time
 
 ggsave(sup_time, file = "plots/plot_loads_time.png", width = 12, height = 10)
@@ -171,13 +171,13 @@ lek_size_high
 
 plot_grid(lek_size_gerp, lek_size_high,
           ncol = 1, 
-          labels = c("C) GERP", "D) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
+          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
 sup_lek
 
 ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
 
 ### combine plots
-plot_grid(sup_time, sup_lek,
+plot_grid(sup_lek, sup_time,
           ncol = 1) -> sup
 ggsave(sup, file = "plots/sup_spatial_temp.png", width = 12, height = 16)
 
