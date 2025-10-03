@@ -144,8 +144,8 @@ ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = ag
   geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
                 position=position_dodge(.9)) +
   theme(legend.position="bottom")+
-  scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
-  scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
+  scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
   labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
@@ -159,8 +159,8 @@ ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = 
   geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.2,
                 position=position_dodge(.9)) +
   theme(legend.position="bottom")+
-  scale_fill_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7))+
-  scale_color_manual(values=alpha(c(clrs_hunting[4], clrs_hunting[2]), 0.7)) +
+  scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
+  scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
   labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
@@ -171,10 +171,15 @@ lek_size_high
 
 plot_grid(lek_size_gerp, lek_size_high,
           ncol = 1, 
-          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
+          labels = c("C) GERP", "D) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
 sup_lek
 
 ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
+
+### combine plots
+plot_grid(sup_time, sup_lek,
+          ncol = 1) -> sup
+ggsave(sup, file = "plots/sup_spatial_temp.png", width = 12, height = 16)
 
 ## modelling
 
