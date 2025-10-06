@@ -488,3 +488,5 @@ all_posteriors <- cowplot::plot_grid(all_posteriors_a + theme(plot.margin = marg
 png("plots/figure_1_all.png", height = 800, width = 1000)
 all_posteriors
 dev.off()
+
+ggsave(all_posteriors, file = "plots/figures_1_all.pdf", device=cairo_pdf, height=10,width=16)
