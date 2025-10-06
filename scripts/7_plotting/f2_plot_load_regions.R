@@ -501,4 +501,5 @@ plot_grid(gerp_per_region_yearling, rawdata_gerp_chick,
 fig2
 ggsave(fig2, file = "plots/figure_2_alternative_with_raw.png", width=14,height=10)
 ggsave(fig2, file = "plots/figure_2_alternative_with_raw.pdf", width=14,height=10, device=cairo_pdf)
+ggsave(fig2, file = "plots/figure_2_alternative_with_raw.eps", width=14,height=10, device=cairo_pdf)
 
