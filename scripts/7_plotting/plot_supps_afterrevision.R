@@ -179,7 +179,7 @@ ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
 ### combine plots
 plot_grid(sup_lek, sup_time,
           ncol = 1) -> sup
-ggsave(sup, file = "plots/sup_spatial_temp.png", width = 12, height = 16)
+ggsave(sup, file = "plots/sup_spatial_temp.png", width = 12, height = 18)
 
 ## modelling
 
