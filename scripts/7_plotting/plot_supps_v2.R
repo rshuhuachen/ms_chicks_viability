@@ -239,16 +239,16 @@ dist
 #### combine ####
 # plot_grid(froh_dist, gerp_dist, high_dist, ncol = 3, align = "hv", axis = "lb",
 #           labels = c("A", "B", "C"), label_fontface = "plain", label_size = 22) -> sup_pt1
-#           
+#     set_null_device("agg")      
 plot_grid(simple_gerp_cat + theme(plot.margin = margin(1,1,1,2, "cm")), simple_snpeff_cat+ theme(plot.margin = margin(1,1,1,2, "cm")), 
           ncol = 1, 
-          labels = c("B", "C"), label_fontface = "plain", label_size = 22) -> sup_pt2
+          labels = c("B", "C"), label_fontface = "bold", label_size = 22) -> sup_pt2
 
 plot_grid(sup_pt2, fig_countsnpef_cat, rel_widths = c(0.7, 1),
           ncol = 2, 
-          labels = c("", "D"), label_fontface = "plain", label_size = 22) -> sup_pt3
+          labels = c("", "D"), label_fontface = "bold", label_size = 22) -> sup_pt3
 
-plot_grid(dist, sup_pt3, rel_heights = c(0.6, 1),labels = c("A", ""), label_fontface = "plain", label_size = 22,
+plot_grid(dist, sup_pt3, rel_heights = c(0.6, 1),labels = c("A", ""), label_fontface = "bold", label_size = 22,
           ncol = 1) -> sup
           
 ggsave(sup, file = "plots/sup_1.png", width=16,height=12)

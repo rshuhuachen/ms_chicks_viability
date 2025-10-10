@@ -497,7 +497,7 @@ subset(load_per_region, method == "GERP ≥ 4") %>%
 
 plot_grid(gerp_per_region_yearling, rawdata_gerp_chick, 
           ncol = 2, align = "hv", axis = "lb",
-          labels = c("A", "B"), label_fontface = "plain", label_size = 22) -> fig2
+          labels = c("A", "B"), label_fontface = "bold", label_size = 22) -> fig2
 fig2
 ggsave(fig2, file = "plots/figure_2_alternative_with_raw.png", width=14,height=10)
 ggsave(fig2, file = "plots/figure_2_alternative_with_raw.pdf", width=14,height=10, device=cairo_pdf)

@@ -66,7 +66,7 @@ ggplot(subset(loads_sum, loadtype=="GERP"), aes(x = year, y = mean, col = age, f
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP") +
   theme( plot.margin = margin(2,1,1,1, "cm"),
          panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
@@ -83,7 +83,7 @@ ggplot(subset(loads_sum, loadtype=="SnpEff"), aes(x = year, y = mean, col = age,
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "SnpEff") +
   theme( panel.spacing = unit(3,"lines"),
          plot.margin = margin(2,1,1,1, "cm"))+
   guides(fill  = guide_legend(order = 1),
@@ -94,7 +94,7 @@ time_size_high
 
 plot_grid(time_size_gerp, time_size_high,
           ncol = 1, 
-          labels = c("C) GERP", "D) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_time
+          labels = c("C", "D"), label_fontface = "bold", label_size = 22) -> sup_time
 sup_time
 
 ggsave(sup_time, file = "plots/plot_loads_time.png", width = 12, height = 10)
@@ -146,7 +146,7 @@ ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = ag
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -161,7 +161,7 @@ ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = 
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title="SnpEff")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -171,7 +171,7 @@ lek_size_high
 
 plot_grid(lek_size_gerp, lek_size_high,
           ncol = 1, 
-          labels = c("A) GERP", "B) SnpEff"), label_fontface = "plain", label_size = 22) -> sup_lek
+          labels = c("A", "B"), label_fontface = "bold", label_size = 22) -> sup_lek
 sup_lek
 
 ggsave(sup_lek, file = "plots/plot_loads_lek.png", width = 12, height = 10)
