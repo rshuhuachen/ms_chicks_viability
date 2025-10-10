@@ -66,7 +66,7 @@ ggplot(subset(loads_sum, loadtype=="GERP"), aes(x = year, y = mean, col = age, f
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", subtitle = "GERP") +
   theme( plot.margin = margin(2,1,1,1, "cm"),
          panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
@@ -83,7 +83,7 @@ ggplot(subset(loads_sum, loadtype=="SnpEff"), aes(x = year, y = mean, col = age,
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "SnpEff") +
+  labs(x = "Birth year", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", subtitle = "SnpEff") +
   theme( panel.spacing = unit(3,"lines"),
          plot.margin = margin(2,1,1,1, "cm"))+
   guides(fill  = guide_legend(order = 1),
@@ -146,7 +146,7 @@ ggplot(subset(loads_sum_lek, loadtype=="GERP"), aes(x = site, y = mean, col = ag
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title = "GERP")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", subtitle = "GERP")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
@@ -161,7 +161,7 @@ ggplot(subset(loads_sum_lek, loadtype=="SnpEff"), aes(x = site, y = mean, col = 
   theme(legend.position="bottom")+
   scale_fill_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7))+
   scale_color_manual(values=alpha(c(clrs_hunting[2], clrs_hunting[4]), 0.7)) +
-  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", title="SnpEff")+
+  labs(x = "Lek", y = "Total load", fill = "Age class", col = "Age class", size = "Sample size", subtitle="SnpEff")+
   theme( plot.margin = margin(2,1,1,1, "cm"),panel.spacing = unit(3,"lines"))+
   guides(fill  = guide_legend(order = 1),
          col = guide_legend(order=1),
