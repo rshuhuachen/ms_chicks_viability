@@ -430,7 +430,7 @@ all_intervals$parameter <- factor(all_intervals$parameter, levels = c("Chicks co
 
 all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks compared to yearlings/adults")) +  
   aes(x = .data$x, y = .data$model) + 
-  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
  # geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
   geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"), 
                aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1.5, 
@@ -440,8 +440,8 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks co
              position=position_nudge(y = -0.1)) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
   labs(x = expression("Standardised"~beta~"estimate"))+
-  scale_fill_manual(values =alpha(c(clr_high), 0.7)) +
-  scale_color_manual(values =c(clr_high)) +
+  scale_fill_manual(values =alpha(c(clr_high, clr_gerp, clr_froh), 0.7)) +
+  scale_color_manual(values =c(clr_high, clr_gerp, clr_froh)) +
   xlim(-1.5,1.5)+
   scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
   theme(panel.border = element_blank(),
@@ -453,6 +453,10 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks co
         axis.title.y = element_blank()) 
 
 all_posteriors_a
+
+pdf("plots/figure_1a.pdf", height = 800, width = 1000)
+all_posteriors_a
+dev.off()
 
 all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to adults")) +  
   aes(x = .data$x, y = .data$model) + 
