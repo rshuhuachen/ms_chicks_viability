@@ -407,6 +407,45 @@ ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP")) +
 gerp_per_region_both
 ggsave(gerp_per_region_both, file = "plots/figure_2_posteriors_gerp_region.png", width = 12, height = 8)
 
+
+### for ppt ####
+
+intervals_both$region <- factor(intervals_both$region, levels = c("Exon", "Intron", "Promoter" ))
+brms_both$outer$region <- factor(brms_both$outer$region, levels = c("Exon", "Intron", "Promoter"))
+
+ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" & 
+                       brms_both$outer$parameter == "Chicks compared to yearlings and adults")) +  
+  aes(x = .data$x, y = .data$region) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
+  geom_segment(data=subset(intervals_both, model == "GERP"& 
+                             parameter == "Chicks compared to yearlings and adults"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+  geom_segment(data=subset(intervals_both, model == "GERP"& 
+                             parameter == "Chicks compared to yearlings and adults"), aes(x = ll, xend = hh, yend = region), col = "black")+
+  #geom_segment(data=subset(intervals_both, model == "GERP"), aes(x = l, xend = h, yend = region), col = "black", linewidth=3)+
+   geom_point(data=subset(intervals_both, model == "GERP"& 
+                           parameter == "Chicks compared to yearlings and adults"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
+  
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardized"~beta~" estimate"))+
+  scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
+  scale_color_manual(values =c(clr_high, clr_gerp)) +
+  xlim(-1,1.5)+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        axis.title.y = element_blank()) -> gerp_per_region_gerp_early
+gerp_per_region_gerp_early
+
+png(file = "plots/figure_2c_earlylife.png", width=400, height=600, bg='transparent')
+gerp_per_region_gerp_early + theme(panel.background = element_rect(fill='transparent'), #transparent panel bg
+                                      plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+                                      panel.grid.major = element_blank(), #remove major gridlines
+                                      panel.grid.minor = element_blank(), #remove minor gridlines
+                                      legend.background = element_rect(fill='transparent'), #transparent legend bg
+                                      legend.box.background = element_rect(fill='transparent')) #transparent legend panel
+dev.off()
+
 ##### Boxplots ####
 ## Load loads per region ###
 load("output/loads_per_region.RData")
