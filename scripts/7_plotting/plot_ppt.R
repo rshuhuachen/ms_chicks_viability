@@ -183,7 +183,12 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks co
   scale_y_discrete(labels = c(expression(italic(F)[ROH]), "Total SnpEff load", "Total GERP load"))+
   theme(panel.border = element_blank(),
         panel.grid = element_blank(),
-        panel.background = element_rect(fill='transparent'),
+        panel.background = element_rect(fill='transparent'), #transparent panel bg
+        plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+        panel.grid.major = element_blank(), #remove major gridlines
+        panel.grid.minor = element_blank(), #remove minor gridlines
+        legend.background = element_rect(fill='transparent'), #transparent legend bg
+        legend.box.background = element_rect(fill='transparent'), #transparent legend panel
         strip.background = element_blank(),
         legend.position = "none",
         plot.title = element_blank(),
@@ -192,44 +197,81 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks co
 
 all_posteriors_a
 
-png("plots/figure_1a.png", width=500, height=400)
+png("plots/figure_1a.png", width=500, height=400, bg='transparent')
 all_posteriors_a
 dev.off()
 
-all_posteriors_b <- ggplot(data = subset(brms_all$outer, parameter == "Yearlings compared to adults")) +  
+
+# without FROH for both early and late life 
+all_posteriors_a_nofroh <- ggplot(data = subset(brms_all$outer, model != "Genomic inbreeding"& 
+                                                parameter == "Chicks compared to yearlings/adults")) +  
   aes(x = .data$x, y = .data$model) + 
-  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = parameter, col = parameter))+
-  # geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
-  geom_segment(data=subset(all_intervals, parameter == "Yearlings compared to adults"), 
-               aes(x = ll, xend = hh, yend = model), col = "black", linewidth=1.5, 
-               position=position_nudge(y = -0.1))+
-  geom_point(data=subset(all_intervals, parameter == "Yearlings compared to adults"), aes(x = m, y = model), 
-             fill="white",  col = "black", shape=21, size = 6,
-             position=position_nudge(y = -0.1)) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
+  # geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Chicks compared to yearlings/adults"),  
+               aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Chicks compared to yearlings/adults"),  
+               aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_point(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Chicks compared to yearlings/adults"),  
+             aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression("Standardised"~beta~"estimate"))+
-  scale_fill_manual(values =alpha(c(clr_gerp), 0.7)) +
-  scale_color_manual(values =c(clr_gerp)) +
+  labs(x = expression("Standardised"~beta))+
+  scale_fill_manual(values =alpha(c(clr_high, clr_high), 0.7)) +
+  scale_color_manual(values =c(clr_high, clr_high)) +
   xlim(-1.5,1.5)+
-  scale_y_discrete(labels = c("Total SnpEff load", "Total GERP load", expression(italic(F)[ROH])))+
+ theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill='transparent'), #transparent panel bg
+        plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+        panel.grid.major = element_blank(), #remove major gridlines
+        panel.grid.minor = element_blank(), #remove minor gridlines
+        legend.background = element_rect(fill='transparent'), #transparent legend bg
+        legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+        strip.background = element_blank(),
+        legend.position = "none",
+        plot.title = element_blank(),
+        strip.text.x = element_text(size = 22, margin = margin(15,15, 200, 15)),
+        axis.title.y = element_blank()) 
+
+all_posteriors_a_nofroh
+
+all_posteriors_b_nofroh <- ggplot(data = subset(brms_all$outer, model != "Genomic inbreeding"& 
+                                                  parameter == "Yearlings compared to adults")) +  
+  aes(x = .data$x, y = .data$model) + 
+  geom_ridgeline(aes(scale = 0.4, height = scaled_density, fill = model, col = model))+
+  # geom_segment(data=subset(all_intervals, parameter == "Chicks compared to yearlings/adults"),  aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Yearlings compared to adults"),  
+               aes(x = l, xend = h, yend = model), col = "black", linewidth=3)+
+  geom_segment(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Yearlings compared to adults"),  
+               aes(x = ll, xend = hh, yend = model), col = "black")+
+  geom_point(data=subset(all_intervals, model != "Genomic inbreeding"&parameter == "Yearlings compared to adults"),  
+             aes(x = m, y = model), fill="white",  col = "black", shape=21, size = 6) + 
+  geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
+  labs(x = expression("Standardised"~beta))+
+  scale_fill_manual(values =alpha(c(clr_gerp, clr_gerp), 0.7)) +
+  scale_color_manual(values =c(clr_gerp, clr_gerp)) +
+  xlim(-1.5,1.5)+
   theme(panel.border = element_blank(),
         panel.grid = element_blank(),
+        panel.background = element_rect(fill='transparent'), #transparent panel bg
+        plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+        panel.grid.major = element_blank(), #remove major gridlines
+        panel.grid.minor = element_blank(), #remove minor gridlines
+        legend.background = element_rect(fill='transparent'), #transparent legend bg
+        legend.box.background = element_rect(fill='transparent'), #transparent legend panel
         strip.background = element_blank(),
         legend.position = "none",
         plot.title = element_blank(),
         strip.text.x = element_text(size = 22, margin = margin(15,15, 200, 15)),
         axis.title.y = element_blank()) 
-all_posteriors_b
 
-all_posteriors <- cowplot::plot_grid(all_posteriors_a + theme(plot.margin = margin(10,1,1,1, "cm")), 
-                                     all_posteriors_b + theme(plot.margin = margin(10,1,1,1, "cm")), 
-                                     ncol = 2, align = "hv", axis = "lb",
-                                     labels = c("A", "B"), 
-                                     label_fontface = "bold", label_size = 22)
+all_posteriors_b_nofroh
 
-png("plots/figure_1_all.png", height = 800, width = 1000)
-all_posteriors
+png("plots/figure_1a_nofroh.png", width=500, height=400, bg='transparent')
+all_posteriors_a_nofroh
 dev.off()
 
-ggsave(all_posteriors, file = "plots/figures_1_all.pdf", device=cairo_pdf, height=10,width=16)
-ggsave(all_posteriors, file = "plots/figures_1_all.eps", device=cairo_pdf, height=10,width=16)
+png("plots/figure_1b_nofroh.png", width=500, height=400, bg='transparent')
+all_posteriors_b_nofroh
+dev.off()
+
