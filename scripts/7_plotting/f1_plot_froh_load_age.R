@@ -454,7 +454,7 @@ all_posteriors_a <- ggplot(data = subset(brms_all$outer, parameter == "Chicks co
 
 all_posteriors_a
 
-pdf("plots/figure_1a.pdf", height = 800, width = 1000)
+png("plots/figure_1a.png", height = 800, width = 1000)
 all_posteriors_a
 dev.off()
 
