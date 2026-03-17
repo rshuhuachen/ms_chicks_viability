@@ -426,7 +426,7 @@ ggplot(data = subset(brms_both$outer, brms_both$outer$model == "GERP" &
                            parameter == "Chicks compared to yearlings and adults"), aes(x = m, y = region), fill="white",  col = "black", shape=21, size = 6) + 
   
   geom_vline(xintercept = 0, col = "#ca562c", linetype="longdash")+
-  labs(x = expression("Standardized"~beta~" estimate"))+
+  labs(x = expression("Standardized"~beta))+
   scale_fill_manual(values =alpha(c(clr_high, clr_gerp), 0.7)) +
   scale_color_manual(values =c(clr_high, clr_gerp)) +
   xlim(-1,1.5)+
